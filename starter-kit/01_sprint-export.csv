@@ -1,0 +1,21 @@
+key,summary,issue_type,status,assignee,story_points,priority,component,created,updated,blocked,blocked_reason,added_mid_sprint
+SBX-101,Explain screen before forced bank linking,Story,In Progress,An Tran,5,High,Transfer,2026-09-15,2026-09-29,No,,No
+SBX-102,Guided support flow for users who cannot link a bank,Story,To Do,Binh Le,8,High,Transfer,2026-09-15,2026-09-22,No,,No
+SBX-103,Transfer confirm button freezes on Android 10,Bug,Done,Chi Nguyen,3,Highest,Transfer,2026-09-12,2026-09-25,No,,No
+SBX-104,Auto-detect bank status mismatch for stuck money,Story,In Progress,Dung Pham,8,High,Transfer,2026-09-10,2026-09-24,Yes,Waiting for NAPAS reconciliation API access,No
+SBX-105,Notify user with expected resolution time for pending transfers,Story,To Do,Dung Pham,5,Medium,Transfer,2026-09-10,2026-09-23,Yes,Depends on SBX-104,No
+SBX-106,QR scan fails in low light,Bug,Done,Giang Vo,2,High,QR,2026-09-11,2026-09-26,No,,No
+SBX-107,Release gate on transfer error rate,Task,In Review,Hoa Dang,3,Medium,Transfer,2026-09-14,2026-09-29,No,,No
+SBX-108,In-app banner 24h before planned maintenance,Story,Done,Hoa Dang,3,Medium,Transfer,2026-09-14,2026-09-28,No,,No
+SBX-109,Duplicate debit shown in transaction history,Bug,In Progress,Chi Nguyen,5,Highest,Transfer,2026-09-19,2026-09-30,No,,No
+SBX-110,Show transfer ETA on confirmation screen,Story,Done,An Tran,3,Low,Transfer,2026-09-09,2026-09-27,No,,No
+SBX-111,CS macro for forced bank linking complaints,Task,Done,Linh Bui,1,Medium,Safety,2026-09-16,2026-09-24,No,,No
+SBX-112,Reply templates for MT 1-star reviews,Story,In Progress,Linh Bui,2,Medium,Safety,2026-09-16,2026-09-26,No,,No
+SBX-113,VietQR static code shows wrong recipient name,Bug,In Review,Giang Vo,3,High,QR,2026-09-17,2026-09-29,No,,No
+SBX-114,Scan QR from gallery image,Story,In Progress,Khoa Ho,5,Medium,QR,2026-09-08,2026-09-25,No,,No
+SBX-115,Transfer history filter resets after back navigation,Bug,To Do,Khoa Ho,2,Low,Transfer,2026-09-08,2026-09-21,No,,No
+SBX-116,Event tracking for bank-linking explain screen,Task,Done,Binh Le,1,Medium,Transfer,2026-09-16,2026-09-29,No,,No
+SBX-117,"SIMO mass-transfer warning, stage 1",Story,In Progress,Linh Bui,5,High,Safety,2026-09-12,2026-09-30,No,,No
+SBX-118,OTP screen timeout too short on slow network,Bug,Done,Chi Nguyen,2,High,Safety,2026-09-13,2026-09-23,No,,No
+SBX-119,Recent recipients shortcut on transfer home,Story,Done,An Tran,3,Medium,Transfer,2026-09-09,2026-09-26,No,,No
+SBX-120,Crash when pasting account number with spaces,Bug,To Do,Hoa Dang,2,Highest,Transfer,2026-09-28,2026-09-29,No,,Yes

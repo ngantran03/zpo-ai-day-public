@@ -1,0 +1,13 @@
+key,summary,issue_type,status,assignee,story_points,priority,component,created
+SBX-121,Triage top 10 transfer errors per release,Task,Backlog,,3,High,Transfer,2026-08-20
+SBX-122,Retry flow when bank times out during transfer,Story,Backlog,,8,Highest,Transfer,2026-08-22
+SBX-123,Dark mode for transfer result screen,Story,Backlog,,3,Low,Transfer,2026-07-30
+SBX-124,Split bill from chat,Story,Backlog,,13,Medium,Transfer,2026-07-15
+SBX-125,Auto-refund when money is stuck over 24h,Story,Backlog,,8,Highest,Transfer,2026-08-28
+SBX-126,QR hub for cross-border QR codes,Story,Backlog,,8,Medium,QR,2026-08-05
+SBX-127,Save QR code image to gallery,Story,Backlog,,2,Low,QR,2026-08-12
+SBX-128,Remind recipient to pay back,Story,Backlog,,5,Medium,Transfer,2026-09-02
+SBX-129,Lower loading time of transfer home under 1s,Task,Backlog,,5,High,Transfer,2026-08-18
+SBX-130,Scam warning for first-time recipients,Story,Backlog,,5,High,Safety,2026-09-05
+SBX-131,Bank-linking FAQ in help center,Task,Backlog,,1,Medium,Transfer,2026-09-18
+SBX-132,Contact picker performance on low-end Android,Bug,Backlog,,3,Medium,Transfer,2026-08-25

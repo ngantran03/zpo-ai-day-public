@@ -1,0 +1,51 @@
+review_id,date,rating,app_version,review_text
+R01,2026-06-01,1,11.6.1,"Bắt liên kết ngân hàng mới cho chuyển tiền, tôi không muốn liên kết. Gỡ app."
+R02,2026-06-02,1,11.6.2,"Bấm xác nhận chuyển tiền thì app đứng hình luôn, phải tắt mở lại 3 lần."
+R03,2026-06-03,1,11.6.3,"Chuyển 500.000đ bị trừ tiền mà người nhận không nhận được, 2 ngày rồi chưa hoàn."
+R04,2026-06-04,1,11.6.1,Tiền trong ví của tôi mà muốn chuyển đi cũng phải liên kết ngân hàng là sao?
+R05,2026-06-05,1,11.6.2,"Phí chuyển tiền ra ngân hàng cao hơn app khác, không hiểu tại sao."
+R06,2026-06-06,1,11.6.3,"Xác thực khuôn mặt hoài không được, đèn đủ sáng rồi vẫn báo lỗi."
+R07,2026-06-07,1,11.6.1,Chuyển tiền báo lỗi hệ thống liên tục từ sáng tới giờ.
+R08,2026-06-08,1,11.6.2,Cập nhật bản mới xong bắt liên kết thẻ mới được chuyển tiền. Quá bất tiện.
+R09,2026-06-09,1,11.6.3,"Tiền bị treo, app báo đang xử lý mà cả tuần không xong."
+R10,2026-06-10,1,11.6.1,Tệ.
+R11,2026-06-11,1,11.6.2,"Tôi không có tài khoản ngân hàng, giờ tiền kẹt trong ví không rút được, không chuyển được."
+R12,2026-06-12,1,11.6.3,"App chậm kinh khủng, mở màn hình chuyển tiền mất 10 giây."
+R13,2026-06-13,1,11.6.1,"Hạn mức chuyển tiền trong ngày thấp quá, chuyển 20 triệu không được."
+R14,2026-06-14,1,11.6.2,Đã trừ tiền trong ví nhưng ngân hàng bên kia báo không nhận được. Gọi tổng đài không ai nghe.
+R15,2026-06-15,1,11.6.3,Không liên kết ngân hàng thì không cho chuyển tiền. Ép người dùng quá đáng.
+R16,2026-06-16,1,11.6.1,"Mỗi lần chuyển số tiền lớn là bắt quét mặt, quét 5 lần mới qua."
+R17,2026-06-17,1,11.6.2,Quét QR xong bấm chuyển thì văng app.
+R18,2026-06-18,1,11.6.3,"Bảo trì đúng giờ cao điểm buổi tối, cần chuyển tiền gấp mà không được."
+R19,2026-06-19,1,11.6.1,"Liên kết ngân hàng báo lỗi, mà không liên kết thì không chuyển tiền được. Bế tắc."
+R20,2026-06-20,1,11.6.2,"Chuyển tiền cho bạn bị trừ 2 lần, 1 lần thành công 1 lần treo chưa hoàn."
+R21,2026-06-21,1,11.6.3,Nhập số tài khoản xong bấm tiếp tục không có phản hồi gì cả.
+R22,2026-06-22,1,11.6.1,"Tự nhiên thu phí chuyển tiền, trước đây miễn phí mà."
+R23,2026-06-23,1,11.6.2,Muốn chuyển nốt tiền còn lại trong ví rồi xoá app mà cũng bắt liên kết ngân hàng.
+R24,2026-06-24,1,11.6.3,"Xác thực khuôn mặt không nhận, tôi đeo kính thì phải làm sao?"
+R25,2026-06-25,1,11.6.1,"Lỗi không xác định khi chuyển tiền qua ngân hàng, thử lại vẫn vậy."
+R26,2026-06-26,1,11.6.2,"Giao dịch thất bại nhưng tiền vẫn bị trừ, không thấy hoàn tiền."
+R27,2026-06-27,1,11.6.3,"Bản cập nhật mới bắt liên kết ngân hàng, không báo trước gì hết."
+R28,2026-06-28,1,11.6.1,"App dở, không nên dùng."
+R29,2026-06-01,1,11.6.2,"Màn hình chuyển tiền trắng trơn, không load được gì."
+R30,2026-06-02,1,11.6.3,Tôi đã liên kết Vietcombank rồi mà vẫn bắt liên kết lại mới cho chuyển.
+R31,2026-06-03,1,11.6.1,"Tiền chuyển đi 3 ngày chưa tới, CS chỉ bảo chờ."
+R32,2026-06-04,1,11.6.2,Chuyển tiền quá hạn mức bị chặn mà không báo hạn mức là bao nhiêu.
+R33,2026-06-05,1,11.6.3,Tại sao chuyển tiền trong ví qua ví cũng phải liên kết ngân hàng? MoMo không bắt.
+R34,2026-06-06,1,11.6.1,"Chuyển tiền bị quay vòng vòng mãi không xong, mạng vẫn ổn."
+R35,2026-06-07,1,11.6.2,"Bắt xác thực khuôn mặt giữa chừng lúc đang chuyển tiền, làm lỡ việc."
+R36,2026-06-08,1,11.6.3,Bị trừ tiền nhưng lịch sử giao dịch báo thất bại. Tiền đâu?
+R37,2026-06-09,1,11.6.1,"Ép liên kết ngân hàng mới cho chuyển tiền, 1 sao."
+R38,2026-06-10,1,11.6.2,"Hệ thống bảo trì mà không thông báo trước, tôi mất cả buổi chờ."
+R39,2026-06-11,1,11.6.3,Cứ đến bước nhập mã OTP là app tự thoát.
+R40,2026-06-12,1,11.6.1,"Phí rút tiền về ngân hàng không hiện trước, đến lúc xác nhận mới thấy."
+R41,2026-06-13,1,11.6.2,"Liên kết ngân hàng xong mới được chuyển, trong khi tôi chỉ muốn chuyển 50.000đ."
+R42,2026-06-14,1,11.6.3,Chuyển tiền đi báo thành công mà người nhận không có tiền. Liên hệ không ai trả lời.
+R43,2026-06-15,1,11.6.1,"App lag, bấm nút chuyển tiền mấy lần mới ăn."
+R44,2026-06-16,1,11.6.2,"Không hiểu sao phải liên kết ngân hàng, app không giải thích gì cả."
+R45,2026-06-17,1,11.6.3,Quét mặt thất bại rồi khoá luôn chức năng chuyển tiền 24 giờ.
+R46,2026-06-18,1,11.6.1,"Tiền bị giữ lại, trạng thái chờ xử lý từ hôm qua."
+R47,2026-06-19,1,11.6.2,"Hạn mức ví thấp, muốn chuyển nhiều phải chia nhiều lần, mỗi lần tốn phí."
+R48,2026-06-20,1,11.6.3,"Vừa cập nhật xong không chuyển tiền được nữa, báo lỗi kết nối."
+R49,2026-06-21,1,11.6.1,Không hài lòng.
+R50,2026-06-22,1,11.6.2,"Bắt liên kết ngân hàng, không liên kết thì không chuyển được, vậy nạp tiền vào ví làm gì?"

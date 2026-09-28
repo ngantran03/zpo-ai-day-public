@@ -1,0 +1,1262 @@
+<title>Tựu trường AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&family=Patrick+Hand&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* One visual world: a bright back-to-school morning. Single light theme by choice,
+   every color set explicitly so it reads the same on any host background. */
+:root {
+  color-scheme: light;
+  --sky-top: #4fb2f4;
+  --sky-mid: #9fd8fb;
+  --sky-low: #dff2fe;
+  --grass-back: #a9dc68;
+  --grass-mid: #8fcf4f;
+  --grass-front: #72bb3c;
+  --path: #f0d9a2;
+  --path-edge: #dcbc78;
+  --paper: #f8fbff;
+  --grid-fine: #e3f0fb;
+  --grid-bold: #cfe4f7;
+  --card: #ffffff;
+  --line: #cfe2f3;
+  --ink: #0b2e6b;
+  --ink-2: #41608e;
+  --orange: #ff9417;
+  --orange-deep: #e56d00;
+  --sun: #ffc83d;
+  --blue: #1e8fea;
+  --green: #2eb86b;
+  --red-pen: #df2f3a;
+  --board: #1f4a3a;
+  --wood: #b9793f;
+  --chalk: #f3f6ef;
+
+  --f-display: "Baloo 2", "Be Vietnam Pro", system-ui, sans-serif;
+  --f-body: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-hand: "Patrick Hand", "Be Vietnam Pro", cursive;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+  /* Motion identity: playful overshoot for pops, decelerate for entrances. */
+  --ease-pop: cubic-bezier(.34, 1.45, .64, 1);
+  --ease-in-view: cubic-bezier(.2, 0, 0, 1);
+  --t-quick: 160ms;
+  --t-std: 280ms;
+  --t-slow: 640ms;
+  --radius: 18px;
+}
+
+* { box-sizing: border-box; }
+body {
+  color: var(--ink);
+  font: 400 16px/1.6 var(--f-body);
+  padding-inline: 20px;
+  -webkit-font-smoothing: antialiased;
+  /* "Vở ô ly": fine grid every 12px, bold line every 48px, like a Vietnamese school notebook. */
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--grid-bold) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-bold) 1px, transparent 1px),
+    linear-gradient(var(--grid-fine) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-fine) 1px, transparent 1px);
+  background-size: 48px 48px, 48px 48px, 12px 12px, 12px 12px;
+}
+.wrap { max-width: 1140px; margin-inline: auto; }
+h1, h2, h3 { font-family: var(--f-display); margin: 0; text-wrap: balance; line-height: 1.12; }
+h2 { font-size: clamp(32px, 4.4vw, 50px); font-weight: 800; letter-spacing: -.01em; }
+h3 { font-size: 21px; font-weight: 700; }
+p { margin: 0; max-width: 62ch; }
+.lede { color: var(--ink-2); font-size: 18px; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; border-radius: 8px; }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; height: 52px; padding-inline: 26px;
+  border-radius: 999px; font: 700 17px/1 var(--f-display); text-decoration: none; cursor: pointer; white-space: nowrap;
+  border: 3px solid transparent;
+  transition: transform var(--t-quick) var(--ease-pop), box-shadow var(--t-quick) ease;
+}
+.btn-primary { background: var(--orange); color: #fff; border-color: #fff; box-shadow: 0 5px 0 var(--orange-deep), 0 10px 22px rgba(229, 109, 0, .28); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 7px 0 var(--orange-deep), 0 14px 26px rgba(229, 109, 0, .3); }
+.btn-primary:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--orange-deep); }
+.btn-ghost { background: rgba(255, 255, 255, .8); color: var(--ink); border-color: #fff; box-shadow: 0 5px 0 var(--line); }
+.btn-ghost:hover { transform: translateY(-2px); }
+.btn-ghost:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--line); }
+
+/* Hand-drawn blue circle around a label, like the banner's "Khối 1". */
+.circled {
+  position: relative; display: inline-block; padding: 2px 16px 4px; font: 800 19px/1.3 var(--f-display); color: var(--blue);
+}
+.circled::before {
+  content: ""; position: absolute; inset: -6px -8px -4px; pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 64' preserveAspectRatio='none'%3E%3Cpath d='M28 36C14 18 70 6 118 7c46 1 76 12 74 28-2 18-58 25-104 24C44 58 8 50 12 34 15 20 58 12 132 10' fill='none' stroke='%231e8fea' stroke-width='4.5' stroke-linecap='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+
+/* Hero band: sky, clouds, the notice card, balloons and the hill Toro runs on. */
+.band {
+  margin-inline: -20px; padding-inline: 20px; position: relative; overflow: hidden;
+  background: linear-gradient(to bottom, var(--sky-top) 0%, var(--sky-mid) 45%, var(--sky-low) 80%);
+}
+.cloud {
+  position: absolute; width: var(--w); height: calc(var(--w) * .34); border-radius: 999px; background: #fff; opacity: .85;
+  filter: blur(1px); top: var(--y); left: var(--x);
+  animation: drift var(--dur, 70s) linear infinite alternate;
+}
+.cloud::before, .cloud::after { content: ""; position: absolute; background: #fff; border-radius: 50%; }
+.cloud::before { width: 48%; height: 140%; left: 16%; top: -60%; }
+.cloud::after { width: 36%; height: 110%; left: 50%; top: -40%; }
+@keyframes drift { from { transform: translateX(-40px); } to { transform: translateX(60px); } }
+
+.nav { position: relative; z-index: 3; display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 72px; }
+.brand { display: flex; align-items: center; gap: 10px; font: 800 22px/1 var(--f-display); text-decoration: none; color: #fff; text-shadow: 0 2px 0 rgba(11, 46, 107, .25); }
+.brand .balloon { position: relative; --w: 20px; }
+.brand .balloon::before { --s: 8px; }
+.nav-links { display: flex; gap: 6px; }
+.nav-links a { text-decoration: none; color: #fff; font-weight: 600; font-size: 15px; padding: 6px 12px; border-radius: 999px; transition: background-color var(--t-quick) ease; }
+.nav-links a:hover { background: rgba(255, 255, 255, .22); }
+
+.hero { position: relative; z-index: 1; display: grid; grid-template-columns: 1.05fr .95fr; gap: 28px; align-items: start; padding-block: 12px 120px; }
+.notice {
+  position: relative; background: rgba(255, 255, 255, .78); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border: 3px solid #fff; border-radius: 28px; padding: 64px 30px 28px; margin-top: 44px;
+  box-shadow: 0 18px 40px rgba(11, 46, 107, .16);
+}
+.title {
+  position: absolute; left: 50%; top: 0; transform: translate(-50%, -52%) rotate(-3deg); width: max-content; max-width: 108%;
+  font: 800 clamp(46px, 6.6vw, 86px)/1.2 var(--f-display); color: var(--orange); text-transform: uppercase; letter-spacing: .01em;
+  -webkit-text-stroke: 12px #fff; paint-order: stroke fill;
+  text-shadow: 0 7px 0 var(--orange-deep), 0 14px 26px rgba(11, 46, 107, .28);
+  animation: title-in var(--t-slow) var(--ease-pop) both;
+}
+@keyframes title-in { from { transform: translate(-50%, -30%) rotate(-3deg) scale(.7); opacity: 0; } to { transform: translate(-50%, -52%) rotate(-3deg); opacity: 1; } }
+.subtitle { text-align: center; font: 800 clamp(18px, 2.2vw, 24px)/1.25 var(--f-display); color: var(--orange); text-transform: uppercase; letter-spacing: .03em; }
+.notice .lede { text-align: center; margin: 10px auto 0; max-width: 40ch; font-size: 17px; }
+.schedule { list-style: none; margin: 22px 0 0; padding: 0; display: flex; flex-direction: column; }
+.schedule li { display: flex; flex-direction: column; align-items: center; gap: 4px; padding-block: 12px; border-top: 1px solid var(--line); text-align: center; }
+.schedule li:first-child { border-top: none; }
+.schedule span { font-size: 17px; color: var(--ink); font-weight: 500; }
+.announce { margin: 12px auto 0; text-align: center; font: 700 19px/1.35 var(--f-display); color: var(--orange-deep); }
+.ctas { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-top: 20px; }
+.notice > :not(.title) { animation: rise-in var(--t-slow) var(--ease-in-view) both; }
+.notice > :nth-child(3) { animation-delay: 80ms; }
+.notice > :nth-child(4) { animation-delay: 160ms; }
+.notice > :nth-child(5) { animation-delay: 240ms; }
+.notice > :nth-child(6) { animation-delay: 300ms; }
+@keyframes rise-in { from { transform: translateY(16px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* Lottie balloons, released from behind the hills. */
+.release { position: relative; aspect-ratio: 1 / 1; max-width: 100%; margin-bottom: -150px; }
+.hero-lottie { position: absolute; inset: 0; }
+.hero-lottie svg { display: block; }
+.release > .balloon { display: none; }
+.release.no-lottie > .balloon { display: block; }
+
+/* The track: hills + path, with a transparent 3D canvas for Toro on top.
+   --ground is set from the 3D camera so the path lines up with Toro's feet. */
+.track {
+  --ground: 84%;
+  position: relative; z-index: 2; height: clamp(260px, 30vw, 340px); margin-top: -150px; margin-inline: -20px; cursor: pointer;
+}
+.hills-back, .hills-front, .path, .grass { position: absolute; left: 0; right: 0; pointer-events: none; }
+.hills-back {
+  top: 22%; bottom: 0;
+  background:
+    radial-gradient(38% 70% at 12% 100%, var(--grass-back) 99%, transparent 100%),
+    radial-gradient(34% 62% at 48% 100%, #b7e27c 99%, transparent 100%),
+    radial-gradient(44% 80% at 88% 100%, var(--grass-back) 99%, transparent 100%);
+}
+.hills-front {
+  top: 44%; bottom: 0;
+  background:
+    radial-gradient(60% 64% at 28% 100%, var(--grass-mid) 99%, transparent 100%),
+    radial-gradient(56% 58% at 80% 100%, var(--grass-mid) 99%, transparent 100%);
+}
+.grass {
+  top: calc(var(--ground) - 16px); bottom: 0; background-color: var(--grass-front);
+  background-image:
+    radial-gradient(circle at 20% 60%, #fff 0 3px, transparent 4px),
+    radial-gradient(circle at 70% 30%, var(--sun) 0 3px, transparent 4px),
+    radial-gradient(circle at 45% 80%, #ffb3c1 0 3px, transparent 4px);
+  background-size: 130px 40px, 170px 44px, 210px 46px;
+}
+.path {
+  top: calc(var(--ground) - 14px); height: 26px;
+  background: linear-gradient(to bottom, var(--path-edge) 0 2px, var(--path) 2px calc(100% - 3px), var(--path-edge) calc(100% - 3px));
+}
+.track canvas { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; display: block; }
+.hill-hint {
+  position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); z-index: 1; pointer-events: none;
+  font: 400 20px/1 var(--f-hand); color: #fff; text-shadow: 0 1px 2px rgba(0, 0, 0, .25); white-space: nowrap;
+}
+.score-num.bump, .toro-toggle.bump { animation: bump var(--t-std) var(--ease-pop); }
+@keyframes bump { 40% { transform: scale(1.22); } }
+
+/* Toro: a fixed, click-through layer along the bottom of the window. */
+.toro-layer { position: fixed; left: 0; right: 0; bottom: 0; height: clamp(220px, 34vh, 340px); z-index: 25; pointer-events: none; }
+.toro-layer canvas { display: block; width: 100%; height: 100%; }
+.toro-say { position: fixed; left: 0; top: 0; z-index: 26; pointer-events: none; will-change: transform; }
+.toro-say p {
+  position: absolute; left: 0; bottom: 14px; width: max-content; max-width: 260px; margin: 0;
+  background: #fff; border-radius: 20px; padding: 10px 16px; color: var(--ink);
+  font: 600 15px/1.4 var(--f-body); box-shadow: 0 8px 22px rgba(11, 46, 107, .18);
+  transform: translateX(-50%) scale(.6); transform-origin: 50% 100%; opacity: 0;
+  transition: transform var(--t-std) var(--ease-pop), opacity var(--t-quick) ease;
+}
+.toro-say p::after { content: ""; position: absolute; left: 50%; bottom: -11px; margin-left: -9px; width: 18px; height: 12px; background: #fff; clip-path: polygon(0 0, 100% 0, 50% 100%); }
+.toro-say.on p { transform: translateX(-50%) scale(1); opacity: 1; }
+.toro-toggle {
+  position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 27;
+  display: inline-flex; align-items: center; gap: 8px; height: 40px; padding-inline: 16px; border-radius: 999px; cursor: pointer;
+  background: #fff; color: var(--ink); border: 2px solid var(--line); box-shadow: 0 6px 16px rgba(11, 46, 107, .14);
+  font: 700 14px/1 var(--f-display); font-variant-numeric: tabular-nums;
+}
+.toro-toggle b { color: var(--orange-deep); font-size: 17px; }
+.toro-toggle span { color: var(--ink-2); font-weight: 600; padding-left: 8px; border-left: 1.5px solid var(--line); }
+.toro-toggle:hover { border-color: var(--blue); }
+/* Fallback when the viewer frame is as tall as the document: Toro stays in the hero hill. */
+.toro-layer.in-hill { position: absolute; inset: 0; height: auto; }
+.toro-say.in-hill { position: absolute; }
+.toro-toggle.in-hill { position: absolute; bottom: 16px; }
+
+/* Balloons (CSS), used for icons, the score jar and flying balloons. */
+.balloon {
+  --c: var(--orange);
+  position: absolute; width: var(--w, 80px); aspect-ratio: 5 / 6;
+  border-radius: 50% 50% 46% 54% / 44% 44% 56% 56%;
+  background: radial-gradient(38% 30% at 34% 28%, rgba(255, 255, 255, .6), transparent 70%), var(--c);
+  box-shadow: inset -6px -8px 14px rgba(0, 0, 0, .12);
+}
+.balloon::after { content: ""; position: absolute; left: 50%; bottom: -12%; width: 16%; height: 12%; margin-left: -8%; background: var(--c); clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.balloon::before { content: ""; position: absolute; left: 50%; top: 100%; width: 1.5px; height: var(--s, 100px); margin-top: 2px; background: rgba(11, 46, 107, .35); }
+.b-orange { --c: var(--orange); } .b-blue { --c: var(--blue); } .b-sun { --c: var(--sun); } .b-green { --c: var(--green); }
+.flyer { position: fixed; z-index: 40; pointer-events: none; --w: 26px; }
+.flyer::before { --s: 14px; }
+.burst { position: fixed; z-index: 30; pointer-events: none; transform: translate(-50%, -50%); }
+
+section { padding-block: 96px 0; }
+.sec-head { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; margin-bottom: 34px; }
+.tag { font-family: var(--f-hand); font-size: 22px; color: var(--red-pen); transform: rotate(-2deg); display: inline-block; }
+
+/* Subjects: textbook covers. One big, two small. */
+.subjects { display: grid; grid-template-columns: 1.2fr 1fr; gap: 18px; }
+.cover {
+  position: relative; border-radius: 10px 22px 22px 10px; padding: 28px 28px 28px 44px; overflow: hidden;
+  display: flex; flex-direction: column; gap: 10px; color: #fff; box-shadow: 0 10px 24px rgba(11, 46, 107, .14);
+}
+.cover::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 18px; background: rgba(0, 0, 0, .14); }
+.cover::after { content: ""; position: absolute; left: 18px; top: 0; bottom: 0; width: 3px; background: rgba(255, 255, 255, .35); }
+.cover-main { grid-row: span 2; background: var(--orange); min-height: 300px; justify-content: space-between; }
+.cover-blue { background: var(--blue); }
+.cover-green { background: #1f9e58; }
+.cover h3 { font-size: clamp(24px, 2.6vw, 32px); font-weight: 800; color: #fff; }
+.cover p { color: rgba(255, 255, 255, .94); }
+.cover .sticker { align-self: flex-start; background: #fff; color: var(--ink); border-radius: 8px; padding: 2px 12px; font: 400 19px/1.4 var(--f-hand); transform: rotate(-2deg); }
+.who { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font-size: 13px; font-weight: 700; padding: 4px 12px; border-radius: 999px; background: rgba(255, 255, 255, .24); }
+
+/* Tasks: notebook pages. */
+.tracks-top { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 20px; align-items: end; margin-bottom: 22px; }
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.tab {
+  font: 700 16px/1 var(--f-display); height: 44px; padding-inline: 18px; border-radius: 12px 12px 4px 4px; cursor: pointer;
+  border: 2px solid var(--line); border-bottom-width: 4px; background: var(--card); color: var(--ink-2);
+  transition: transform var(--t-quick) var(--ease-pop), background-color var(--t-quick) ease, color var(--t-quick) ease;
+}
+.tab:hover { transform: translateY(-2px); color: var(--ink); }
+.tab[aria-selected="true"] { background: var(--blue); border-color: var(--blue); border-bottom-color: #0d6cc0; color: #fff; }
+.tab .n { font-family: var(--f-hand); font-weight: 400; font-size: 17px; margin-left: 6px; opacity: .85; }
+.score {
+  display: flex; align-items: center; gap: 12px; padding: 8px 18px 8px 12px; background: var(--card);
+  border: 2px solid var(--line); border-radius: 999px; white-space: nowrap;
+}
+.jar { position: relative; width: 30px; height: 34px; }
+.jar .balloon { --w: 22px; left: 4px; top: 0; }
+.jar .balloon::before { --s: 8px; }
+.score-num { display: inline-block; font: 800 28px/1 var(--f-display); font-variant-numeric: tabular-nums; }
+.score small { display: block; color: var(--ink-2); font-size: 13px; line-height: 1.25; }
+
+.track-intro { color: var(--ink-2); margin-bottom: 18px; }
+.tickets { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+.ticket {
+  position: relative; border-radius: 6px 16px 16px 6px; padding: 18px 20px 18px 50px; display: flex; flex-direction: column; gap: 8px;
+  background-color: var(--card);
+  background-image:
+    linear-gradient(90deg, transparent 36px, #f3a5a8 36px 38px, transparent 38px),
+    repeating-linear-gradient(to bottom, transparent 0 27px, #dbe9f6 27px 28px);
+  box-shadow: 0 1px 0 var(--line), 0 8px 20px rgba(11, 46, 107, .08);
+  transition: transform var(--t-std) var(--ease-in-view), box-shadow var(--t-std) ease;
+  animation: rise-in var(--t-std) var(--ease-in-view) both; animation-delay: calc(var(--i, 0) * 40ms);
+}
+.ticket::before { /* binder holes */
+  content: ""; position: absolute; left: 12px; top: 22px; width: 12px; height: calc(100% - 44px);
+  background: radial-gradient(circle, var(--paper) 0 5px, transparent 6px) center top / 12px 56px repeat-y;
+}
+.ticket:hover { transform: translateY(-3px) rotate(-.4deg); box-shadow: 0 1px 0 var(--line), 0 14px 26px rgba(11, 46, 107, .12); }
+.ticket-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.key { font: 700 13px/1 var(--f-mono); color: var(--ink-2); }
+.grade { font: 400 24px/1 var(--f-hand); color: var(--red-pen); display: inline-flex; align-items: center; gap: 6px; }
+.grade .balloon { position: relative; --w: 13px; }
+.grade .balloon::before { --s: 4px; }
+.ticket h3 { font-size: 21px; }
+.ticket p { color: var(--ink-2); font-size: 15px; line-height: 1.6; }
+.ticket .pass { font: 400 19px/1.35 var(--f-hand); color: var(--red-pen); }
+.claim {
+  margin-top: 4px; align-self: flex-start; font: 700 15px/1 var(--f-display); height: 38px; padding-inline: 16px;
+  border-radius: 999px; border: 2px solid var(--orange); background: #fff; color: var(--orange-deep); cursor: pointer;
+  transition: transform var(--t-quick) var(--ease-pop), background-color var(--t-quick) ease, color var(--t-quick) ease;
+}
+.claim:hover { transform: translateY(-1px); }
+.claim:active { transform: scale(.95); }
+.ticket.claimed .claim { background: var(--orange); color: #fff; }
+.ticket.claimed::after {
+  content: "Đạt"; position: absolute; right: 16px; bottom: 14px; font: 400 26px/1 var(--f-hand); color: var(--red-pen);
+  border: 2px solid var(--red-pen); border-radius: 50%; width: 58px; height: 58px; display: grid; place-items: center; transform: rotate(-12deg);
+  animation: stamp var(--t-std) var(--ease-pop) both;
+}
+@keyframes stamp { from { transform: rotate(-12deg) scale(1.6); opacity: 0; } }
+
+/* Rules: a chalkboard with a wooden frame. */
+.board {
+  position: relative; border-radius: 14px; padding: clamp(24px, 4vw, 44px); border: 14px solid var(--wood);
+  background: radial-gradient(120% 90% at 30% 20%, #275a47, var(--board) 70%);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, .35), 0 16px 30px rgba(11, 46, 107, .16);
+  color: var(--chalk);
+}
+.board h2 { color: var(--chalk); font-family: var(--f-hand); font-weight: 400; font-size: clamp(34px, 4.4vw, 50px); }
+.board .lede { color: rgba(243, 246, 239, .8); margin-top: 6px; }
+.rules { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 44px; margin-top: 26px; }
+.rule { display: grid; grid-template-columns: 38px 1fr; gap: 12px; padding-block: 14px; border-top: 1.5px dashed rgba(243, 246, 239, .28); }
+.rule-n { font: 400 30px/1 var(--f-hand); color: var(--sun); }
+.rule h3 { font: 400 25px/1.2 var(--f-hand); color: #fff; }
+.rule p { color: rgba(243, 246, 239, .84); font-size: 15px; }
+.rule.penalty .rule-n { color: #ff8e95; }
+.chalk-tray { position: absolute; left: 10%; right: 10%; bottom: -14px; height: 8px; background: #8f5a2c; border-radius: 0 0 6px 6px; }
+.chalk-tray::before { content: ""; position: absolute; left: 12%; top: -6px; width: 44px; height: 8px; background: #fff; border-radius: 3px; }
+
+/* Timetable, drawn to scale. */
+.agenda-switch { display: flex; gap: 8px; margin-bottom: 18px; }
+.timetable { background: var(--card); border: 2px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.tt-row { display: grid; grid-template-columns: 90px minmax(0, 1fr); border-top: 2px solid var(--line); }
+.tt-row:first-child { border-top: none; }
+.tt-time { padding: 16px; font: 700 14px/1.3 var(--f-mono); color: var(--ink-2); border-right: 2px solid var(--line); font-variant-numeric: tabular-nums; }
+.tt-body { position: relative; padding: 12px 16px; display: flex; align-items: center; min-height: 58px; }
+.tt-fill { position: absolute; left: 0; top: 0; bottom: 0; width: var(--pct); background: #e8f4fe; transition: width var(--t-slow) var(--ease-in-view); }
+.tt-row.play .tt-fill { background: #ffe7c7; }
+.tt-text { position: relative; display: flex; flex-wrap: wrap; gap: 2px 12px; align-items: baseline; }
+.tt-text b { font: 700 18px/1.3 var(--f-display); }
+.tt-text span { color: var(--ink-2); font-size: 14px; }
+
+/* Prep: the school bag. */
+.prep { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.prep-box { background: var(--card); border: 2px solid var(--line); border-radius: var(--radius); padding: 26px; }
+.prep-box h3 { margin-bottom: 14px; }
+.check { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
+.check li { display: grid; grid-template-columns: 28px 1fr; gap: 8px; color: var(--ink-2); }
+.check li::before { content: "✓"; font: 400 24px/1 var(--f-hand); color: var(--green); }
+.check.warn li::before { content: "!"; color: var(--red-pen); }
+.check b { color: var(--ink); font-weight: 600; }
+
+/* Closing band */
+.closing {
+  margin-top: 96px; margin-inline: -20px; padding: 70px 20px 150px; position: relative; overflow: hidden; text-align: center;
+  background: linear-gradient(to bottom, var(--sky-top), var(--sky-low));
+}
+.closing .inner { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.closing h2 { font-size: clamp(38px, 5.6vw, 66px); color: var(--orange); -webkit-text-stroke: 9px #fff; paint-order: stroke fill; text-shadow: 0 6px 0 var(--orange-deep); text-transform: uppercase; }
+.closing p { color: var(--ink); font-weight: 500; }
+.closing .hills-back { top: auto; height: 130px; }
+.closing .hills-front { top: auto; height: 80px; }
+.closing > .balloon { animation: bob 6s ease-in-out infinite alternate; }
+@keyframes bob { from { transform: translateY(0) rotate(-3deg); } to { transform: translateY(-14px) rotate(3deg); } }
+
+footer { padding-block: 26px 120px; color: var(--ink-2); font-size: 14px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; padding-block: 8px 0; }
+  .release { max-width: 420px; width: 100%; margin: 0 auto -95px; }
+  .subjects, .prep, .rules { grid-template-columns: 1fr; }
+  .cover-main { grid-row: auto; min-height: 0; }
+  .tracks-top { grid-template-columns: 1fr; }
+  .score { justify-self: start; }
+  .nav-links { display: none; }
+  section { padding-block: 72px 0; }
+}
+@media (max-width: 460px) {
+  .notice { padding-inline: 18px; }
+  .tickets { grid-template-columns: 1fr; }
+  .tt-row { grid-template-columns: 70px minmax(0, 1fr); }
+  .toro-say p { max-width: 210px; font-size: 14px; }
+  .toro-layer { height: 170px; }
+  .toro-toggle { height: 36px; padding-inline: 12px; font-size: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+
+<header class="band" id="top">
+  <span class="cloud" aria-hidden="true" style="--w:180px; --x:6%;  --y:120px; --dur:80s"></span>
+  <span class="cloud" aria-hidden="true" style="--w:130px; --x:58%; --y:70px;  --dur:64s"></span>
+  <span class="cloud" aria-hidden="true" style="--w:220px; --x:78%; --y:250px; --dur:90s"></span>
+  <span class="cloud" aria-hidden="true" style="--w:110px; --x:36%; --y:330px; --dur:72s"></span>
+
+  <div class="wrap">
+    <nav class="nav" aria-label="Main">
+      <a class="brand" href="#top"><span class="balloon b-orange" aria-hidden="true"></span>Tựu trường AI</a>
+      <div class="nav-links">
+        <a href="#tracks">Tasks</a>
+        <a href="#rules">Class rules</a>
+        <a href="#agenda">Timetable</a>
+        <a href="#prep">School bag</a>
+      </div>
+    </nav>
+
+    <div class="hero">
+      <div class="notice">
+        <h1 class="title">Tựu trường</h1>
+        <p class="subtitle">AI Demo Day for the PO team</p>
+        <p class="lede">Back to school, AI edition. Teams of 3 to 5 take on 21 real PO tasks in 87 minutes.</p>
+        <ul class="schedule">
+          <li><span class="circled">Teams</span><span>3 to 5 people, mixed levels</span></li>
+          <li><span class="circled">Play time</span><span>87 minutes, 21 tasks and a final challenge</span></li>
+          <li><span class="circled">Scoring</span><span>1 balloon = 1 point. Highest score wins.</span></li>
+        </ul>
+        <p class="announce">Date and room to be announced</p>
+        <div class="ctas">
+          <a class="btn btn-primary" href="#tracks">See the tasks</a>
+          <a class="btn btn-ghost" href="#rules">How scoring works</a>
+        </div>
+      </div>
+
+      <div class="release no-lottie" id="release" aria-hidden="true">
+        <div class="hero-lottie" id="hero-lottie"></div>
+        <span class="balloon b-orange" style="--w:110px; --s:170px; left:18%; top:10%"></span>
+        <span class="balloon b-blue" style="--w:90px; --s:200px; left:50%; top:4%"></span>
+        <span class="balloon b-sun" style="--w:76px; --s:170px; left:68%; top:22%"></span>
+        <span class="balloon b-green" style="--w:60px; --s:150px; left:8%; top:40%"></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="track" id="track">
+    <div class="hills-back" aria-hidden="true"></div>
+    <div class="hills-front" aria-hidden="true"></div>
+    <div class="grass" aria-hidden="true"></div>
+    <div class="path" aria-hidden="true"></div>
+    <p class="hill-hint">Click the hill to let a balloon go</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <section aria-labelledby="why-h">
+    <div class="sec-head">
+      <span class="tag">Môn học</span>
+      <h2 id="why-h">Three subjects you use on Monday</h2>
+      <p class="lede">Every task comes from real PO work: sprint reports, tickets, review analysis.</p>
+    </div>
+    <div class="subjects">
+      <div class="cover cover-main">
+        <span class="sticker">Hands-on</span>
+        <div>
+          <h3>Everyone drives at least one task</h3>
+          <p style="margin-top:10px">A different person types for each task. On 1-balloon tasks, juniors drive and seniors coach. Nobody spends the session watching.</p>
+        </div>
+        <div class="who"><span class="chip">Junior POs</span><span class="chip">Senior POs</span><span class="chip">Managers</span></div>
+      </div>
+      <div class="cover cover-blue">
+        <span class="sticker">Jira</span>
+        <h3>Connect AI to Jira</h3>
+        <p>Pull a live sprint, spot tickets likely to spill over, and create a ticket that waits for your approval.</p>
+      </div>
+      <div class="cover cover-green">
+        <span class="sticker">Agents</span>
+        <h3>Build something reusable</h3>
+        <p>A ticket writer the whole team can share, or a supervisor that runs three specialist agents.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="tracks" aria-labelledby="tracks-h">
+    <div class="sec-head">
+      <span class="tag">Bài tập</span>
+      <h2 id="tracks-h">Pick a track. Hand in a task.</h2>
+      <p class="lede">A judge checks each task against the red-pen pass line. Try Claim to see how a team's score adds up.</p>
+    </div>
+    <div class="tracks-top">
+      <div class="tabs" role="tablist" aria-label="Tracks" id="tabs"></div>
+      <div class="score" aria-live="polite">
+        <div class="jar" id="jar" aria-hidden="true"><span class="balloon b-orange"></span></div>
+        <div><span class="score-num" id="score">0</span><small>practice balloons, out of 39</small></div>
+      </div>
+    </div>
+    <p class="track-intro" id="track-intro"></p>
+    <div class="tickets" id="tickets" role="tabpanel"></div>
+  </section>
+
+  <section id="rules" aria-labelledby="rules-h">
+    <div class="board">
+      <h2 id="rules-h">Nội quy lớp học</h2>
+      <p class="lede">Class rules. There is no penalty for failing a check. Fix it and show the judge again.</p>
+      <div class="rules">
+        <div class="rule"><span class="rule-n" aria-hidden="true">1.</span><div><h3>One claim per task</h3><p>Each team can claim each task once.</p></div></div>
+        <div class="rule"><span class="rule-n" aria-hidden="true">2.</span><div><h3>The judge decides</h3><p>Show the output. The judge checks it against the pass line on the card.</p></div></div>
+        <div class="rule"><span class="rule-n" aria-hidden="true">3.</span><div><h3>Rotate the driver</h3><p>A different member types for each task. Everyone drives once before the final challenge.</p></div></div>
+        <div class="rule"><span class="rule-n" aria-hidden="true">4.</span><div><h3>Juniors drive, seniors coach</h3><p>On 1-balloon tasks, seniors can talk but not type.</p></div></div>
+        <div class="rule penalty"><span class="rule-n" aria-hidden="true">−1</span><div><h3>Stay safe</h3><p>Lose a balloon for pasting real user data into AI or writing to a real Jira board.</p></div></div>
+        <div class="rule"><span class="rule-n" aria-hidden="true">6.</span><div><h3>Ties</h3><p>The team that finished the final challenge first wins. Otherwise, the team that reached the score first.</p></div></div>
+      </div>
+      <span class="chalk-tray" aria-hidden="true"></span>
+    </div>
+  </section>
+
+  <section id="agenda" aria-labelledby="agenda-h">
+    <div class="sec-head">
+      <span class="tag">Thời khóa biểu</span>
+      <h2 id="agenda-h">Timetable, drawn to scale</h2>
+      <p class="lede">Each shaded bar is that block's share of the session.</p>
+    </div>
+    <div class="agenda-switch tabs" role="tablist" aria-label="Session length">
+      <button class="tab" role="tab" aria-selected="true" data-len="120" id="len-120">2-hour session</button>
+      <button class="tab" role="tab" aria-selected="false" data-len="60" id="len-60">1-hour session</button>
+    </div>
+    <div class="timetable" id="timetable"></div>
+  </section>
+
+  <section id="prep" aria-labelledby="prep-h">
+    <div class="sec-head">
+      <span class="tag">Cặp sách</span>
+      <h2 id="prep-h">Pack your school bag</h2>
+    </div>
+    <div class="prep">
+      <div class="prep-box">
+        <h3>Bring</h3>
+        <ul class="check">
+          <li><span><b>A laptop with an AI assistant</b>: Claude, ChatGPT or Copilot.</span></li>
+          <li><span><b>Jira access for one person per team</b>, with a token or an MCP connection. The setup guide arrives 2 days before.</span></li>
+          <li><span><b>Your team name.</b> Teams are mixed: one senior, one manager, and one to three juniors.</span></li>
+        </ul>
+      </div>
+      <div class="prep-box">
+        <h3>Know</h3>
+        <ul class="check warn">
+          <li><span><b>All data is made up.</b> The starter kit has a sample sprint, 50 reviews, a meeting transcript and more.</span></li>
+          <li><span><b>Write tickets only to the SBX sandbox project</b>, never to a real squad board.</span></li>
+          <li><span><b>No real user data in any AI tool.</b> No phone numbers, account IDs or transaction IDs.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="closing">
+  <div class="hills-back" aria-hidden="true"></div>
+  <div class="hills-front" aria-hidden="true"></div>
+  <span class="balloon b-sun" aria-hidden="true" style="--w:64px; --s:90px; left:12%; top:26%"></span>
+  <span class="balloon b-blue" aria-hidden="true" style="--w:50px; --s:80px; right:14%; top:18%; animation-delay:-2s"></span>
+  <span class="balloon b-green" aria-hidden="true" style="--w:42px; --s:70px; right:24%; top:44%; animation-delay:-4s"></span>
+  <div class="inner">
+    <h2>See you at school</h2>
+    <p>Form your team of 3 to 5 before the session. Date and room to be announced.</p>
+    <a class="btn btn-primary" href="#tracks">Browse the tasks</a>
+  </div>
+</div>
+
+<footer class="wrap">
+  <span>Tựu trường AI, the AI Demo Day session for the PO team</span>
+  <span>Max score 39. Tie-break: final challenge.</span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie_light.min.js"></script>
+<!-- LOTTIE:START --><script type="application/json" id="lottie-data">{"hero":{"v":"5.7.4","fr":60,"ip":0,"op":390,"w":600,"h":600,"nm":"hero-balloons","ddd":0,"assets":[],"layers":[{"ddd":0,"ind":1,"ty":4,"nm":"confetti-1","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[-851.2401940972752]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[221.58273443473925,155.8080599725078,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[201.97841804342406,375.8080599725078,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[11.215292025840135,16.31061360236082]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[1.0,0.58,0.09,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":2,"ty":4,"nm":"confetti-2","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[-871.6228383820433]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[188.99315289694715,193.61851055671315,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[161.24144112118393,413.61851055671315,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[8.54427808006319,16.875384215768133]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[0.24,0.72,0.42,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":3,"ty":4,"nm":"confetti-3","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[-660.59904488603]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[384.21305144650955,82.45117953544207,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[405.26631430813694,302.45117953544207,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[10.380082847904681,22.172049013692032]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[1.0,0.58,0.09,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":4,"ty":4,"nm":"confetti-4","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[-415.65008471953934]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[121.72559841430547,194.6766319370586,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[77.15699801788185,414.6766319370586,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[9.850890944611606,20.634813047552303]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[1,1,1,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":5,"ty":4,"nm":"confetti-5","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[-628.0638273612856]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[334.00649971189546,133.37543590849546,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[342.5081246398693,353.37543590849543,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[8.376733849839939,13.372171231675834]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[1.0,0.58,0.09,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":6,"ty":4,"nm":"confetti-6","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[-737.4569942139685]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[323.67754767141275,36.70589103996798,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[329.5969345892659,256.705891039968,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[10.719106258224652,15.67776316989135]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[0.24,0.72,0.42,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":7,"ty":4,"nm":"confetti-7","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[-423.75552025767956]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[146.46556719513416,126.19435367369553,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[108.08195899391768,346.19435367369556,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[10.06085413975024,17.108808228106817]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[1,1,1,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":8,"ty":4,"nm":"confetti-8","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[-772.8682677549191]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[240.08346066069444,45.8239998130594,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[225.10432582586805,265.8239998130594,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"el","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[10.530190126860466,10.530190126860466]},"d":1},{"ty":"fl","c":{"a":0,"k":[0.12,0.56,0.92,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":9,"ty":4,"nm":"confetti-9","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[397.1319926797047]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[357.4190370062835,25.872526050552892,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[371.7737962578543,245.8725260505529,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[10.10107032631501,17.56807803487028]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[1.0,0.79,0.24,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":10,"ty":4,"nm":"confetti-10","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[513.6815873308406]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[132.85941072799403,225.01531026563208,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[91.07426340999254,445.0153102656321,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[12.208952127826542,19.01243700346562]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[1.0,0.58,0.09,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":11,"ty":4,"nm":"confetti-11","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[-626.59421706077]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[221.623386531106,65.78126170838229,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[202.0292331638825,285.7812617083823,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"el","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[10.132784657242077,10.132784657242077]},"d":1},{"ty":"fl","c":{"a":0,"k":[1.0,0.58,0.09,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":12,"ty":4,"nm":"confetti-12","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[-602.5611965126387]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[167.00158182513155,169.98704238874683,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[133.75197728141444,389.98704238874683,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[13.500897357080369,17.566464310687632]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[0.12,0.56,0.92,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":13,"ty":4,"nm":"confetti-13","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[892.6922237406404]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[339.2002091218068,21.402918463350318,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[349.00026140225845,241.40291846335032,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"el","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[9.670526387083383,9.670526387083383]},"d":1},{"ty":"fl","c":{"a":0,"k":[0.24,0.72,0.42,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":14,"ty":4,"nm":"confetti-14","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[-366.5140523156514]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[399.22186479574486,125.34599139669785,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[424.02733099468105,345.34599139669785,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[9.057306370942221,15.026785921467544]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[0.12,0.56,0.92,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":15,"ty":4,"nm":"confetti-15","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[874.6728797835515]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[436.23287179588954,199.69677052502016,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[470.2910897448619,419.69677052502016,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[10.513679006751968,16.344834299789365]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[1.0,0.79,0.24,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":16,"ty":4,"nm":"confetti-16","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[845.7478254312941]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[414.1185600875091,109.0191246880982,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[442.6482001093863,329.0191246880982,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"el","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[12.438708486586492,12.438708486586492]},"d":1},{"ty":"fl","c":{"a":0,"k":[1,1,1,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":17,"ty":4,"nm":"confetti-17","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[393.6138236740913]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[499.1576001479798,103.29555757766303,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[548.9470001849747,323.29555757766303,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[10.393872993921638,13.793956099619113]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[1,1,1,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":18,"ty":4,"nm":"confetti-18","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[-649.7740915029552]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[136.96268231692088,240.9481187328107,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[96.2033528961511,460.9481187328107,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[11.604363563026887,13.782844138162133]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[0.12,0.56,0.92,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":19,"ty":4,"nm":"confetti-19","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[-702.5811724083064]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[527.4587625395662,229.28380326147635,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[584.3234531744579,449.28380326147635,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"el","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[11.684413926730873,11.684413926730873]},"d":1},{"ty":"fl","c":{"a":0,"k":[1.0,0.58,0.09,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":20,"ty":4,"nm":"confetti-20","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[619.4133564924502]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[526.9631730087909,234.00018611714106,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[583.7039662609886,454.0001861171411,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[13.093621558907689,22.333786128365254]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[0.24,0.72,0.42,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":21,"ty":4,"nm":"confetti-21","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[-638.8206402396536]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[217.29063555777185,159.4747966355681,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[196.6132944472148,379.4747966355681,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"el","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[10.871731661059947,10.871731661059947]},"d":1},{"ty":"fl","c":{"a":0,"k":[1.0,0.79,0.24,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":22,"ty":4,"nm":"confetti-22","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[888.3906710682453]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[83.59922544491943,103.47100309302499,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[29.499031806149276,323.471003093025,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[11.259034555292686,13.05960791765282]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[1.0,0.79,0.24,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":23,"ty":4,"nm":"confetti-23","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[-647.5998946461547]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[515.1644962551974,169.9926207615486,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[568.9556203189968,389.9926207615486,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[13.44955126197824,16.214683230300277]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[1.0,0.79,0.24,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":24,"ty":4,"nm":"confetti-24","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[-795.2824357842605]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[436.7835414137011,164.2007466668612,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[470.97942676712637,384.20074666686116,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"el","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[12.73039558462468,12.73039558462468]},"d":1},{"ty":"fl","c":{"a":0,"k":[0.12,0.56,0.92,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":25,"ty":4,"nm":"confetti-25","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[-786.6616337812394]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[502.4062290315276,139.40180832016276,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[553.0077862894095,359.4018083201628,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[10.956691057483667,19.817638327764044]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[0.12,0.56,0.92,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":26,"ty":4,"nm":"confetti-26","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[875.7003409135199]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[286.5934116181332,129.54321627957887,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[283.2417645226665,349.54321627957887,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"el","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[10.68336606660034,10.68336606660034]},"d":1},{"ty":"fl","c":{"a":0,"k":[1,1,1,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":27,"ty":4,"nm":"confetti-27","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[-618.9156501812306]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[234.5426842597638,137.40754948536684,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[218.17835532470477,357.40754948536687,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[10.026424879031183,17.43347170048235]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[0.12,0.56,0.92,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":28,"ty":4,"nm":"confetti-28","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[782.4435574129686]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[412.3147102989187,56.73295196868369,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[440.3933878736484,276.73295196868366,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"el","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[8.719421785016825,8.719421785016825]},"d":1},{"ty":"fl","c":{"a":0,"k":[1.0,0.58,0.09,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":29,"ty":4,"nm":"confetti-29","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[610.1066916938787]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[440.6612809566815,135.4391820542296,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[475.8266011958518,355.4391820542296,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[11.815053328835242,13.632798633634346]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[0.12,0.56,0.92,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":30,"ty":4,"nm":"confetti-30","sr":1,"ks":{"o":{"a":1,"k":[{"t":58,"s":[100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":112,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[0]}]},"r":{"a":1,"k":[{"t":58,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":148,"s":[795.5110702973859]}]},"p":{"a":1,"k":[{"t":58,"s":[300,300,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":77,"s":[397.5343283025061,181.35748688378783,0],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":148,"s":[421.9179103781326,401.35748688378783,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":58,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":66,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":148,"s":[70,70,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"bit","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[8.762230203787187,14.251046723662302]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[0.12,0.56,0.92,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":58,"op":149,"st":0,"bm":0},{"ddd":0,"ind":31,"ty":4,"nm":"sparkle-31","sr":1,"ks":{"o":{"a":0,"k":100},"r":{"a":1,"k":[{"t":160,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":224,"s":[90]}]},"p":{"a":0,"k":[470,110,0]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":160,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":190,"s":[100,100,100],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":224,"s":[0,0,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"star","it":[{"ty":"sh","ks":{"a":0,"k":{"v":[[0,-13],[2.86,-2.86],[13,0],[2.86,2.86],[0,13],[-2.86,2.86],[-13,0],[-2.86,-2.86]],"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1.0,0.79,0.24,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":160,"op":225,"st":0,"bm":0},{"ddd":0,"ind":32,"ty":4,"nm":"sparkle-32","sr":1,"ks":{"o":{"a":0,"k":100},"r":{"a":1,"k":[{"t":205,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":269,"s":[90]}]},"p":{"a":0,"k":[90,170,0]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":205,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":235,"s":[100,100,100],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":269,"s":[0,0,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"star","it":[{"ty":"sh","ks":{"a":0,"k":{"v":[[0,-10],[2.2,-2.2],[10,0],[2.2,2.2],[0,10],[-2.2,2.2],[-10,0],[-2.2,-2.2]],"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.12,0.56,0.92,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":205,"op":270,"st":0,"bm":0},{"ddd":0,"ind":33,"ty":4,"nm":"sparkle-33","sr":1,"ks":{"o":{"a":0,"k":100},"r":{"a":1,"k":[{"t":250,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":314,"s":[90]}]},"p":{"a":0,"k":[540,380,0]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":250,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":280,"s":[100,100,100],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":314,"s":[0,0,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"star","it":[{"ty":"sh","ks":{"a":0,"k":{"v":[[0,-9],[1.98,-1.98],[9,0],[1.98,1.98],[0,9],[-1.98,1.98],[-9,0],[-1.98,-1.98]],"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1,1,1,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":250,"op":315,"st":0,"bm":0},{"ddd":0,"ind":34,"ty":4,"nm":"sparkle-34","sr":1,"ks":{"o":{"a":0,"k":100},"r":{"a":1,"k":[{"t":290,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":354,"s":[90]}]},"p":{"a":0,"k":[250,60,0]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":290,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":320,"s":[100,100,100],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":354,"s":[0,0,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"star","it":[{"ty":"sh","ks":{"a":0,"k":{"v":[[0,-11],[2.42,-2.42],[11,0],[2.42,2.42],[0,11],[-2.42,2.42],[-11,0],[-2.42,-2.42]],"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.12,0.56,0.92,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":290,"op":355,"st":0,"bm":0},{"ddd":0,"ind":35,"ty":4,"nm":"sparkle-35","sr":1,"ks":{"o":{"a":0,"k":100},"r":{"a":1,"k":[{"t":180,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":244,"s":[90]}]},"p":{"a":0,"k":[60,450,0]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":180,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":210,"s":[100,100,100],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":244,"s":[0,0,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"star","it":[{"ty":"sh","ks":{"a":0,"k":{"v":[[0,-8],[1.76,-1.76],[8,0],[1.76,1.76],[0,8],[-1.76,1.76],[-8,0],[-1.76,-1.76]],"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1,1,1,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":180,"op":245,"st":0,"bm":0},{"ddd":0,"ind":36,"ty":4,"nm":"sparkle-36","sr":1,"ks":{"o":{"a":0,"k":100},"r":{"a":1,"k":[{"t":310,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":374,"s":[90]}]},"p":{"a":0,"k":[395,420,0]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":310,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":340,"s":[100,100,100],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":374,"s":[0,0,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"star","it":[{"ty":"sh","ks":{"a":0,"k":{"v":[[0,-10],[2.2,-2.2],[10,0],[2.2,2.2],[0,10],[-2.2,2.2],[-10,0],[-2.2,-2.2]],"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.12,0.56,0.92,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":310,"op":375,"st":0,"bm":0},{"ddd":0,"ind":37,"ty":4,"nm":"sparkle-37","sr":1,"ks":{"o":{"a":0,"k":100},"r":{"a":1,"k":[{"t":225,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":289,"s":[90]}]},"p":{"a":0,"k":[560,200,0]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":225,"s":[0,0,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":255,"s":[100,100,100],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":289,"s":[0,0,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"star","it":[{"ty":"sh","ks":{"a":0,"k":{"v":[[0,-7],[1.54,-1.54],[7,0],[1.54,1.54],[0,7],[-1.54,1.54],[-7,0],[-1.54,-1.54]],"i":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0],[0,0]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[1.0,0.79,0.24,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":225,"op":290,"st":0,"bm":0},{"ddd":0,"ind":38,"ty":4,"nm":"balloon-38","sr":1,"ks":{"o":{"a":1,"k":[{"t":14,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":30,"s":[100]}]},"r":{"a":1,"k":[{"t":14,"s":[-5.0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":84,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":150,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":210,"s":[2.5],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":330,"s":[-2.5],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":390,"s":[0]}]},"p":{"a":1,"k":[{"t":14,"s":[300,1020,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":62,"s":[300,574,0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":84,"s":[300,590,0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":150,"s":[300,590,0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":270,"s":[300,581,0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":390,"s":[300,590,0]}]},"a":{"a":0,"k":[300,590,0]},"s":{"a":1,"k":[{"t":14,"s":[72,72,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":62,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":84,"s":[100,100,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"shine","it":[{"ty":"el","p":{"a":0,"k":[282.8,288.54]},"s":{"a":0,"k":[17.2,13.26]},"d":1},{"ty":"fl","c":{"a":0,"k":[1,1,1,1]},"o":{"a":0,"k":55},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":-28},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]},{"ty":"gr","nm":"body","it":[{"ty":"el","p":{"a":0,"k":[300,312]},"s":{"a":0,"k":[86,102]},"d":1},{"ty":"gf","o":{"a":0,"k":100},"r":1,"t":2,"s":{"a":0,"k":[282.8,287.52]},"e":{"a":0,"k":[347.3,363.0]},"h":{"a":0,"k":0},"a":{"a":0,"k":0},"g":{"p":3,"k":{"a":0,"k":[0,1.0,0.769,0.5,0.42,1.0,0.58,0.09,1,0.72,0.418,0.065]}}},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]},{"ty":"gr","nm":"knot","it":[{"ty":"sh","ks":{"a":0,"k":{"v":[[300,360.0],[308,372.0],[292,372.0]],"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.72,0.418,0.065,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]},{"ty":"gr","nm":"string","it":[{"ty":"sh","ks":{"a":0,"k":{"v":[[300,372.0],[300,590]],"i":[[0,0],[14,-80]],"o":[[-14,80],[0,0]],"c":false}}},{"ty":"tm","s":{"a":0,"k":0},"o":{"a":0,"k":0},"m":1,"e":{"a":1,"k":[{"t":14,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":60,"s":[100]}]}},{"ty":"st","c":{"a":0,"k":[0.29,0.33,0.45,1]},"o":{"a":0,"k":55},"w":{"a":0,"k":2},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":0,"op":390,"st":0,"bm":0},{"ddd":0,"ind":39,"ty":4,"nm":"balloon-39","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":16,"s":[100]}]},"r":{"a":1,"k":[{"t":0,"s":[4],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":70,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":150,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":210,"s":[-2],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":330,"s":[2],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":390,"s":[0]}]},"p":{"a":1,"k":[{"t":0,"s":[210,1020,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":48,"s":[210,574,0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":70,"s":[210,590,0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":150,"s":[210,590,0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":270,"s":[210,578,0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":390,"s":[210,590,0]}]},"a":{"a":0,"k":[210,590,0]},"s":{"a":1,"k":[{"t":0,"s":[72,72,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":48,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":70,"s":[100,100,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"shine","it":[{"ty":"el","p":{"a":0,"k":[175.0,174.06]},"s":{"a":0,"k":[30.0,23.14]},"d":1},{"ty":"fl","c":{"a":0,"k":[1,1,1,1]},"o":{"a":0,"k":55},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":-28},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]},{"ty":"gr","nm":"body","it":[{"ty":"el","p":{"a":0,"k":[205,215]},"s":{"a":0,"k":[150,178]},"d":1},{"ty":"gf","o":{"a":0,"k":100},"r":1,"t":2,"s":{"a":0,"k":[175.0,172.28]},"e":{"a":0,"k":[287.5,304.0]},"h":{"a":0,"k":0},"a":{"a":0,"k":0},"g":{"p":3,"k":{"a":0,"k":[0,1.0,0.769,0.5,0.42,1.0,0.58,0.09,1,0.72,0.418,0.065]}}},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]},{"ty":"gr","nm":"knot","it":[{"ty":"sh","ks":{"a":0,"k":{"v":[[205,301.0],[213,313.0],[197,313.0]],"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.72,0.418,0.065,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]},{"ty":"gr","nm":"string","it":[{"ty":"sh","ks":{"a":0,"k":{"v":[[205,313.0],[210,590]],"i":[[0,0],[14,-80]],"o":[[-14,80],[0,0]],"c":false}}},{"ty":"tm","s":{"a":0,"k":0},"o":{"a":0,"k":0},"m":1,"e":{"a":1,"k":[{"t":0,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":46,"s":[100]}]}},{"ty":"st","c":{"a":0,"k":[0.29,0.33,0.45,1]},"o":{"a":0,"k":55},"w":{"a":0,"k":2},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":0,"op":390,"st":0,"bm":0},{"ddd":0,"ind":40,"ty":4,"nm":"balloon-40","sr":1,"ks":{"o":{"a":1,"k":[{"t":9,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":25,"s":[100]}]},"r":{"a":1,"k":[{"t":9,"s":[-6],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":79,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":150,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":210,"s":[3],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":330,"s":[-3],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":390,"s":[0]}]},"p":{"a":1,"k":[{"t":9,"s":[432,1020,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":57,"s":[432,574,0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":79,"s":[432,590,0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":150,"s":[432,590,0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":270,"s":[432,600,0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":390,"s":[432,590,0]}]},"a":{"a":0,"k":[432,590,0]},"s":{"a":1,"k":[{"t":9,"s":[72,72,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":57,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":79,"s":[100,100,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"shine","it":[{"ty":"el","p":{"a":0,"k":[424.2,223.48]},"s":{"a":0,"k":[20.8,16.12]},"d":1},{"ty":"fl","c":{"a":0,"k":[1,1,1,1]},"o":{"a":0,"k":55},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":-28},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]},{"ty":"gr","nm":"body","it":[{"ty":"el","p":{"a":0,"k":[445,252]},"s":{"a":0,"k":[104,124]},"d":1},{"ty":"gf","o":{"a":0,"k":100},"r":1,"t":2,"s":{"a":0,"k":[424.2,222.24]},"e":{"a":0,"k":[502.2,314.0]},"h":{"a":0,"k":0},"a":{"a":0,"k":0},"g":{"p":3,"k":{"a":0,"k":[0,1.0,0.885,0.582,0.42,1.0,0.79,0.24,1,0.72,0.569,0.173]}}},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]},{"ty":"gr","nm":"knot","it":[{"ty":"sh","ks":{"a":0,"k":{"v":[[445,311.0],[453,323.0],[437,323.0]],"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.72,0.569,0.173,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]},{"ty":"gr","nm":"string","it":[{"ty":"sh","ks":{"a":0,"k":{"v":[[445,323.0],[432,590]],"i":[[0,0],[14,-80]],"o":[[-14,80],[0,0]],"c":false}}},{"ty":"tm","s":{"a":0,"k":0},"o":{"a":0,"k":0},"m":1,"e":{"a":1,"k":[{"t":9,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":55,"s":[100]}]}},{"ty":"st","c":{"a":0,"k":[0.29,0.33,0.45,1]},"o":{"a":0,"k":55},"w":{"a":0,"k":2},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":0,"op":390,"st":0,"bm":0},{"ddd":0,"ind":41,"ty":4,"nm":"balloon-41","sr":1,"ks":{"o":{"a":1,"k":[{"t":5,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":21,"s":[100]}]},"r":{"a":1,"k":[{"t":5,"s":[5.0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":75,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":150,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":210,"s":[-2.5],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":330,"s":[2.5],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":390,"s":[0]}]},"p":{"a":1,"k":[{"t":5,"s":[328,1020,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":53,"s":[328,574,0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":75,"s":[328,590,0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":150,"s":[328,590,0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":270,"s":[328,582,0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":390,"s":[328,590,0]}]},"a":{"a":0,"k":[328,590,0]},"s":{"a":1,"k":[{"t":5,"s":[72,72,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":53,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":75,"s":[100,100,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"shine","it":[{"ty":"el","p":{"a":0,"k":[314.0,117.34]},"s":{"a":0,"k":[24.0,18.46]},"d":1},{"ty":"fl","c":{"a":0,"k":[1,1,1,1]},"o":{"a":0,"k":55},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":-28},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]},{"ty":"gr","nm":"body","it":[{"ty":"el","p":{"a":0,"k":[338,150]},"s":{"a":0,"k":[120,142]},"d":1},{"ty":"gf","o":{"a":0,"k":100},"r":1,"t":2,"s":{"a":0,"k":[314.0,115.92]},"e":{"a":0,"k":[404.0,221.0]},"h":{"a":0,"k":0},"a":{"a":0,"k":0},"g":{"p":3,"k":{"a":0,"k":[0,0.516,0.758,0.956,0.42,0.12,0.56,0.92,1,0.086,0.403,0.662]}}},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]},{"ty":"gr","nm":"knot","it":[{"ty":"sh","ks":{"a":0,"k":{"v":[[338,218.0],[346,230.0],[330,230.0]],"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.086,0.403,0.662,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]},{"ty":"gr","nm":"string","it":[{"ty":"sh","ks":{"a":0,"k":{"v":[[338,230.0],[328,590]],"i":[[0,0],[14,-80]],"o":[[-14,80],[0,0]],"c":false}}},{"ty":"tm","s":{"a":0,"k":0},"o":{"a":0,"k":0},"m":1,"e":{"a":1,"k":[{"t":5,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":51,"s":[100]}]}},{"ty":"st","c":{"a":0,"k":[0.29,0.33,0.45,1]},"o":{"a":0,"k":55},"w":{"a":0,"k":2},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":0,"op":390,"st":0,"bm":0},{"ddd":0,"ind":42,"ty":4,"nm":"balloon-42","sr":1,"ks":{"o":{"a":1,"k":[{"t":16,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":32,"s":[100]}]},"r":{"a":1,"k":[{"t":16,"s":[-6],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":86,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":150,"s":[0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":210,"s":[3],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":330,"s":[-3],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":390,"s":[0]}]},"p":{"a":1,"k":[{"t":16,"s":[122,1020,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":64,"s":[122,574,0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":86,"s":[122,590,0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":150,"s":[122,590,0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":270,"s":[122,598,0],"o":{"x":[0.37],"y":[0]},"i":{"x":[0.63],"y":[1]}},{"t":390,"s":[122,590,0]}]},"a":{"a":0,"k":[122,590,0]},"s":{"a":1,"k":[{"t":16,"s":[72,72,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":64,"s":[100,100,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":86,"s":[100,100,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"shine","it":[{"ty":"el","p":{"a":0,"k":[97.6,315.22]},"s":{"a":0,"k":[14.4,11.18]},"d":1},{"ty":"fl","c":{"a":0,"k":[1,1,1,1]},"o":{"a":0,"k":55},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":-28},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]},{"ty":"gr","nm":"body","it":[{"ty":"el","p":{"a":0,"k":[112,335]},"s":{"a":0,"k":[72,86]},"d":1},{"ty":"gf","o":{"a":0,"k":100},"r":1,"t":2,"s":{"a":0,"k":[97.6,314.36]},"e":{"a":0,"k":[151.6,378.0]},"h":{"a":0,"k":0},"a":{"a":0,"k":0},"g":{"p":3,"k":{"a":0,"k":[0,0.582,0.846,0.681,0.42,0.24,0.72,0.42,1,0.173,0.518,0.302]}}},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]},{"ty":"gr","nm":"knot","it":[{"ty":"sh","ks":{"a":0,"k":{"v":[[112,375.0],[120,387.0],[104,387.0]],"i":[[0,0],[0,0],[0,0]],"o":[[0,0],[0,0],[0,0]],"c":true}}},{"ty":"fl","c":{"a":0,"k":[0.173,0.518,0.302,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]},{"ty":"gr","nm":"string","it":[{"ty":"sh","ks":{"a":0,"k":{"v":[[112,387.0],[122,590]],"i":[[0,0],[14,-80]],"o":[[-14,80],[0,0]],"c":false}}},{"ty":"tm","s":{"a":0,"k":0},"o":{"a":0,"k":0},"m":1,"e":{"a":1,"k":[{"t":16,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":62,"s":[100]}]}},{"ty":"st","c":{"a":0,"k":[0.29,0.33,0.45,1]},"o":{"a":0,"k":55},"w":{"a":0,"k":2},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":0,"op":390,"st":0,"bm":0}],"markers":[{"tm":0,"cm":"intro","dr":150},{"tm":150,"cm":"loop","dr":240}]},"burst":{"v":"5.7.4","fr":60,"ip":0,"op":54,"w":240,"h":240,"nm":"claim-burst","ddd":0,"assets":[],"layers":[{"ddd":0,"ind":1,"ty":4,"nm":"ring","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":30,"s":[0]}]},"r":{"a":0,"k":0},"p":{"a":0,"k":[120.0,120.0,0]},"a":{"a":0,"k":[0,0,0]},"s":{"a":0,"k":[100,100,100]}},"ao":0,"shapes":[{"ty":"gr","nm":"ring","it":[{"ty":"el","p":{"a":0,"k":[0,0]},"s":{"a":1,"k":[{"t":0,"s":[16,16],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":30,"s":[190,190]}]},"d":1},{"ty":"st","c":{"a":0,"k":[0.12,0.56,0.92,1]},"o":{"a":0,"k":100},"w":{"a":1,"k":[{"t":0,"s":[12],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":30,"s":[0]}]},"lc":2,"lj":2},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":0,"op":54,"st":0,"bm":0},{"ddd":0,"ind":2,"ty":4,"nm":"dot-0","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":26,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":44,"s":[0]}]},"r":{"a":1,"k":[{"t":0,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[300]}]},"p":{"a":1,"k":[{"t":0,"s":[120.0,120.0,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":34,"s":[212.88166583585974,120.10362758110719,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":0,"s":[40,40,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":8,"s":[110,110,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[30,30,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"dot","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[9.031070802064606,19.35229457585273]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[1.0,0.58,0.09,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":0,"op":54,"st":0,"bm":0},{"ddd":0,"ind":3,"ty":4,"nm":"dot-1","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":26,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":44,"s":[0]}]},"r":{"a":1,"k":[{"t":0,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[-300]}]},"p":{"a":1,"k":[{"t":0,"s":[120.0,120.0,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":34,"s":[199.3884653427309,153.64496047405078,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":0,"s":[40,40,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":8,"s":[110,110,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[30,30,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"dot","it":[{"ty":"el","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[8.106983371609559,8.106983371609559]},"d":1},{"ty":"fl","c":{"a":0,"k":[0.12,0.56,0.92,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":0,"op":54,"st":0,"bm":0},{"ddd":0,"ind":4,"ty":4,"nm":"dot-2","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":26,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":44,"s":[0]}]},"r":{"a":1,"k":[{"t":0,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[-300]}]},"p":{"a":1,"k":[{"t":0,"s":[120.0,120.0,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":34,"s":[188.37534018197,199.47462238736972,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":0,"s":[40,40,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":8,"s":[110,110,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[30,30,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"dot","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[7.1183330286511985,15.25357077568114]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[1.0,0.79,0.24,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":0,"op":54,"st":0,"bm":0},{"ddd":0,"ind":5,"ty":4,"nm":"dot-3","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":26,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":44,"s":[0]}]},"r":{"a":1,"k":[{"t":0,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[300]}]},"p":{"a":1,"k":[{"t":0,"s":[120.0,120.0,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":34,"s":[140.3476090150192,196.99791359783842,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":0,"s":[40,40,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":8,"s":[110,110,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[30,30,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"dot","it":[{"ty":"el","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[9.25917405682727,9.25917405682727]},"d":1},{"ty":"fl","c":{"a":0,"k":[0.24,0.72,0.42,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":0,"op":54,"st":0,"bm":0},{"ddd":0,"ind":6,"ty":4,"nm":"dot-4","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":26,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":44,"s":[0]}]},"r":{"a":1,"k":[{"t":0,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[300]}]},"p":{"a":1,"k":[{"t":0,"s":[120.0,120.0,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":34,"s":[119.9682726762214,221.01982627885073,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":0,"s":[40,40,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":8,"s":[110,110,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[30,30,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"dot","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[6.7409625776691495,14.444919809291035]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[1.0,0.58,0.09,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":0,"op":54,"st":0,"bm":0},{"ddd":0,"ind":7,"ty":4,"nm":"dot-5","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":26,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":44,"s":[0]}]},"r":{"a":1,"k":[{"t":0,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[300]}]},"p":{"a":1,"k":[{"t":0,"s":[120.0,120.0,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":34,"s":[89.56429132053914,186.65691550289546,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":0,"s":[40,40,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":8,"s":[110,110,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[30,30,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"dot","it":[{"ty":"el","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[11.699610246486365,11.699610246486365]},"d":1},{"ty":"fl","c":{"a":0,"k":[0.12,0.56,0.92,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":0,"op":54,"st":0,"bm":0},{"ddd":0,"ind":8,"ty":4,"nm":"dot-6","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":26,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":44,"s":[0]}]},"r":{"a":1,"k":[{"t":0,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[-300]}]},"p":{"a":1,"k":[{"t":0,"s":[120.0,120.0,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":34,"s":[51.13399016577958,192.45979435288206,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":0,"s":[40,40,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":8,"s":[110,110,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[30,30,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"dot","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[7.408662928433707,15.875706275215089]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[1.0,0.79,0.24,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":0,"op":54,"st":0,"bm":0},{"ddd":0,"ind":9,"ty":4,"nm":"dot-7","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":26,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":44,"s":[0]}]},"r":{"a":1,"k":[{"t":0,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[300]}]},"p":{"a":1,"k":[{"t":0,"s":[120.0,120.0,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":34,"s":[44.044744549725024,160.6154145222848,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":0,"s":[40,40,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":8,"s":[110,110,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[30,30,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"dot","it":[{"ty":"el","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[8.0935243395271,8.0935243395271]},"d":1},{"ty":"fl","c":{"a":0,"k":[0.24,0.72,0.42,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":0,"op":54,"st":0,"bm":0},{"ddd":0,"ind":10,"ty":4,"nm":"dot-8","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":26,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":44,"s":[0]}]},"r":{"a":1,"k":[{"t":0,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[-300]}]},"p":{"a":1,"k":[{"t":0,"s":[120.0,120.0,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":34,"s":[35.16762902529612,122.94681302439427,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":0,"s":[40,40,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":8,"s":[110,110,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[30,30,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"dot","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[8.316136379518333,17.820292241825]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[1.0,0.58,0.09,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":0,"op":54,"st":0,"bm":0},{"ddd":0,"ind":11,"ty":4,"nm":"dot-9","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":26,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":44,"s":[0]}]},"r":{"a":1,"k":[{"t":0,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[-300]}]},"p":{"a":1,"k":[{"t":0,"s":[120.0,120.0,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":34,"s":[43.44891457424335,106.78861481213886,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":0,"s":[40,40,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":8,"s":[110,110,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[30,30,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"dot","it":[{"ty":"el","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[11.62596635223689,11.62596635223689]},"d":1},{"ty":"fl","c":{"a":0,"k":[0.12,0.56,0.92,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":0,"op":54,"st":0,"bm":0},{"ddd":0,"ind":12,"ty":4,"nm":"dot-10","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":26,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":44,"s":[0]}]},"r":{"a":1,"k":[{"t":0,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[-300]}]},"p":{"a":1,"k":[{"t":0,"s":[120.0,120.0,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":34,"s":[59.295558494672726,75.32448796766013,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":0,"s":[40,40,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":8,"s":[110,110,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[30,30,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"dot","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[7.544046562080863,16.16581406160185]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[1.0,0.79,0.24,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":0,"op":54,"st":0,"bm":0},{"ddd":0,"ind":13,"ty":4,"nm":"dot-11","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":26,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":44,"s":[0]}]},"r":{"a":1,"k":[{"t":0,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[-300]}]},"p":{"a":1,"k":[{"t":0,"s":[120.0,120.0,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":34,"s":[102.40919637375288,68.29931952231459,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":0,"s":[40,40,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":8,"s":[110,110,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[30,30,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"dot","it":[{"ty":"el","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[8.956530655805658,8.956530655805658]},"d":1},{"ty":"fl","c":{"a":0,"k":[0.24,0.72,0.42,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":0,"op":54,"st":0,"bm":0},{"ddd":0,"ind":14,"ty":4,"nm":"dot-12","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":26,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":44,"s":[0]}]},"r":{"a":1,"k":[{"t":0,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[-300]}]},"p":{"a":1,"k":[{"t":0,"s":[120.0,120.0,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":34,"s":[126.6325068339531,48.97788503897429,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":0,"s":[40,40,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":8,"s":[110,110,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[30,30,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"dot","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[7.566052853297666,16.21297039992357]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[1.0,0.58,0.09,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":0,"op":54,"st":0,"bm":0},{"ddd":0,"ind":15,"ty":4,"nm":"dot-13","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":26,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":44,"s":[0]}]},"r":{"a":1,"k":[{"t":0,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[-300]}]},"p":{"a":1,"k":[{"t":0,"s":[120.0,120.0,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":34,"s":[151.28772108962514,50.67103397378355,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":0,"s":[40,40,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":8,"s":[110,110,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[30,30,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"dot","it":[{"ty":"el","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[10.527765654256108,10.527765654256108]},"d":1},{"ty":"fl","c":{"a":0,"k":[0.12,0.56,0.92,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":0,"op":54,"st":0,"bm":0},{"ddd":0,"ind":16,"ty":4,"nm":"dot-14","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":26,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":44,"s":[0]}]},"r":{"a":1,"k":[{"t":0,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[300]}]},"p":{"a":1,"k":[{"t":0,"s":[120.0,120.0,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":34,"s":[179.1374045099767,77.33419232023847,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":0,"s":[40,40,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":8,"s":[110,110,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[30,30,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"dot","it":[{"ty":"rc","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[7.466499031527097,15.99964078184378]},"r":{"a":0,"k":2},"d":1},{"ty":"fl","c":{"a":0,"k":[1.0,0.79,0.24,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":0,"op":54,"st":0,"bm":0},{"ddd":0,"ind":17,"ty":4,"nm":"dot-15","sr":1,"ks":{"o":{"a":1,"k":[{"t":0,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":26,"s":[100],"o":{"x":[0.4],"y":[0]},"i":{"x":[1],"y":[1]}},{"t":44,"s":[0]}]},"r":{"a":1,"k":[{"t":0,"s":[0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[300]}]},"p":{"a":1,"k":[{"t":0,"s":[120.0,120.0,0],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":34,"s":[186.03846158993298,102.82572652207472,0]}]},"a":{"a":0,"k":[0,0,0]},"s":{"a":1,"k":[{"t":0,"s":[40,40,100],"o":{"x":[0.34],"y":[0]},"i":{"x":[0.64],"y":[1]}},{"t":8,"s":[110,110,100],"o":{"x":[0.2],"y":[0]},"i":{"x":[0],"y":[1]}},{"t":44,"s":[30,30,100]}]}},"ao":0,"shapes":[{"ty":"gr","nm":"dot","it":[{"ty":"el","p":{"a":0,"k":[0,0]},"s":{"a":0,"k":[10.616048264374415,10.616048264374415]},"d":1},{"ty":"fl","c":{"a":0,"k":[0.24,0.72,0.42,1]},"o":{"a":0,"k":100},"r":1},{"ty":"tr","p":{"a":0,"k":[0,0]},"a":{"a":0,"k":[0,0]},"s":{"a":0,"k":[100,100]},"r":{"a":0,"k":0},"o":{"a":0,"k":100},"sk":{"a":0,"k":0},"sa":{"a":0,"k":0}}]}],"ip":0,"op":54,"st":0,"bm":0}]}}</script><!-- LOTTIE:END -->
+<script>
+const TRACKS = [
+  { id: "A", name: "Prompting", worth: 1, intro: "Best for juniors and managers. Each task takes 5 to 10 minutes.", tasks: [
+    ["A1", "Sprint in 5 lines", "Summarize the sample sprint: story points committed vs done, blocked tickets, top risk.", "All numbers match the answer key."],
+    ["A2", "Fix the vague ticket", "Rewrite “Add remind feature for transfer” into a story with acceptance criteria and edge cases.", "3+ testable criteria, 2 real edge cases."],
+    ["A3", "Catch the liar", "An AI-written sprint summary hides 3 errors. Use AI to find them against the source file.", "All 3 found, each with the source row."],
+    ["A4", "1-star review themes", "Group 50 one-star reviews into their top 5 themes, with counts and a quote each.", "Counts add up to 50. Quotes are real."],
+    ["A5", "Meeting to actions", "Turn a 10-minute transcript into a table of owner, action and deadline.", "All 6 actions found. None invented."],
+    ["A6", "Prompt golf", "Get a correct 5-ticket table in one prompt, with no follow-ups.", "Right on the first response."]
+  ]},
+  { id: "B", name: "Jira", worth: 2, intro: "Connect AI to Jira. Best for mid-level and senior members.", tasks: [
+    ["B1", "Live sprint pull", "Have AI read the live sprint and list tickets not updated in 3 or more days.", "The list matches the board."],
+    ["B2", "Spillover radar", "Flag the tickets most likely to spill over, with one reason each.", "3+ flags with reasons from the data."],
+    ["B3", "Search in plain words", "Ask for “unresolved High bugs from the last 14 days”, then run the Jira query AI writes.", "The query runs and returns the right set."],
+    ["B4", "Ticket with a confirm gate", "Create a story in the sandbox. AI must show a preview and wait for your yes.", "Preview and approval visible before posting."],
+    ["B5", "Gap finder", "Check the top review themes against the backlog. Which complaints have no ticket?", "Both gaps found."],
+    ["B6", "Partner feedback digest", "A partner bank forwarded its merchants' feedback. Summarize the themes for your next partner sync.", "A correct summary, with nothing sensitive in it."]
+  ]},
+  { id: "C", name: "Agents", worth: 2, intro: "Build things the team keeps. Best for seniors.", tasks: [
+    ["C1", "Reusable ticket writer", "Save a project, custom GPT or skill that always writes the team's ticket format.", "Two inputs, same format, no extra prompting."],
+    ["C2", "Write, critique, revise", "One AI persona writes a PRD. A tough reviewer critiques it. Revise it.", "Real critique and a visible before and after."],
+    ["C3", "Chain it", "Go from review themes to a problem statement to 3 user stories, one step at a time.", "Every story traces back to the data."],
+    ["C4", "Story to clickable screen", "Turn one user story into a clickable HTML mockup.", "The judge can click through the main flow."],
+    ["C5", "Sprint review agent", "Give an agent one goal: prepare my sprint review. No step-by-step prompting.", "A draft with correct numbers, from one prompt."],
+    ["C6", "Agent squad", "A supervisor splits one goal across a researcher, a writer and a reviewer.", "The reviewer sends a ticket back, and it gets fixed.", 3]
+  ]},
+  { id: "D", name: "Quiz", worth: 1, intro: "Quick wins for managers. Five questions per round, no AI allowed.", tasks: [
+    ["D1", "Safe or unsafe to paste?", "Which of these is fine to put into a public AI chat?", "4 out of 5 correct."],
+    ["D2", "Trust or verify?", "Which AI answers can you use as they are, and which need checking first?", "4 out of 5 correct."],
+    ["D3", "Which tool fits?", "A one-off prompt, a saved skill, or a scheduled agent?", "4 out of 5 correct."]
+  ]},
+  { id: "F", name: "Final", worth: 3, intro: "The final challenge, plus a bonus for explaining your work.", tasks: [
+    ["BOSS", "Sprint autopilot", "From one prompt, in 20 minutes: pull the sprint, report, flag the top risk, draft a fix ticket, get approval, post it.", "Everything runs. The most junior member explains it.", 3],
+    ["BONUS", "Teach-back", "A junior explains one finished task in 60 seconds: the prompt, why it worked, where AI went wrong.", "A clear answer on where AI went wrong.", 1]
+  ]}
+];
+
+const claimed = new Map();
+const tabsEl = document.getElementById("tabs");
+const ticketsEl = document.getElementById("tickets");
+const introEl = document.getElementById("track-intro");
+const scoreEl = document.getElementById("score");
+const jarEl = document.getElementById("jar");
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const icon = (n) => Array.from({ length: n }, () => '<span class="balloon b-orange"></span>').join("");
+
+TRACKS.forEach((t, i) => {
+  const b = document.createElement("button");
+  b.className = "tab"; b.setAttribute("role", "tab"); b.id = "tab-" + t.id;
+  b.setAttribute("aria-selected", i === 0 ? "true" : "false");
+  b.innerHTML = `${t.name}<span class="n">${t.id === "F" ? "+3" : t.id === "C" ? "+2/3" : "+" + t.worth}</span>`;
+  b.addEventListener("click", () => show(t.id));
+  b.addEventListener("keydown", (e) => {
+    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+    const n = (i + (e.key === "ArrowRight" ? 1 : TRACKS.length - 1)) % TRACKS.length;
+    show(TRACKS[n].id); document.getElementById("tab-" + TRACKS[n].id).focus();
+  });
+  tabsEl.appendChild(b);
+});
+
+function show(id) {
+  const t = TRACKS.find((x) => x.id === id);
+  tabsEl.querySelectorAll(".tab").forEach((b) => b.setAttribute("aria-selected", String(b.id === "tab-" + id)));
+  ticketsEl.setAttribute("aria-labelledby", "tab-" + id);
+  introEl.textContent = t.intro;
+  ticketsEl.innerHTML = t.tasks.map(([key, name, what, done, w], i) => {
+    const worth = w ?? t.worth, on = claimed.has(key);
+    return `<article class="ticket${on ? " claimed" : ""}" style="--i:${i}" data-key="${key}" data-worth="${worth}">
+      <div class="ticket-top"><span class="key">${key}</span>
+        <span class="grade" aria-label="${worth} balloon${worth > 1 ? "s" : ""}">${icon(worth)}+${worth}</span></div>
+      <h3>${name}</h3>
+      <p>${what}</p>
+      <p class="pass">Pass: ${done}</p>
+      <button class="claim" type="button" aria-pressed="${on}">${on ? "Claimed" : "Claim"}</button>
+    </article>`;
+  }).join("");
+}
+
+ticketsEl.addEventListener("click", (e) => {
+  const btn = e.target.closest(".claim");
+  if (!btn) return;
+  const card = btn.closest(".ticket"), key = card.dataset.key, worth = Number(card.dataset.worth);
+  if (claimed.has(key)) {
+    claimed.delete(key);
+    card.classList.remove("claimed"); btn.textContent = "Claim"; btn.setAttribute("aria-pressed", "false");
+    updateScore();
+  } else {
+    claimed.set(key, worth);
+    card.classList.add("claimed"); btn.textContent = "Claimed"; btn.setAttribute("aria-pressed", "true");
+    const r = btn.getBoundingClientRect();
+    burstAt(r.left + r.width / 2, r.top + r.height / 2, worth >= 3 ? 260 : 170);
+    fly(btn, worth);
+    window.toroSpawn?.(r.left + r.width / 2);
+  }
+});
+
+function updateScore() {
+  let total = 0; claimed.forEach((w) => (total += w));
+  scoreEl.textContent = total;
+  scoreEl.classList.remove("bump"); void scoreEl.offsetWidth; scoreEl.classList.add("bump");
+  if (total === 39) [0, 180, 360].forEach((ms, k) => setTimeout(() =>
+    burstAt(innerWidth * (0.3 + k * 0.2), innerHeight * (0.4 + (k % 2) * 0.12), 420), ms));
+}
+
+// Balloons float from the button to the score on an upward arc, then the count bumps.
+function fly(from, n) {
+  if (reduceMotion) { updateScore(); return; }
+  const a = from.getBoundingClientRect(), z = jarEl.getBoundingClientRect();
+  let landed = 0;
+  for (let k = 0; k < n; k++) {
+    const el = document.createElement("span");
+    el.className = "balloon b-orange flyer";
+    const sx = a.left + a.width / 2 - 13, sy = a.top - 20;
+    el.style.left = sx + "px"; el.style.top = sy + "px";
+    document.body.appendChild(el);
+    const dx = z.left + 4 - sx, dy = z.top - sy;
+    const anim = el.animate([
+      { transform: "translate(0,0) scale(.6)", opacity: 0 },
+      { transform: `translate(${dx * .35}px, ${Math.min(dy, 0) - 80}px) scale(1.05) rotate(-6deg)`, opacity: 1, offset: .45 },
+      { transform: `translate(${dx}px, ${dy}px) scale(.8) rotate(4deg)`, opacity: 1 }
+    ], { duration: 720, delay: k * 90, easing: "cubic-bezier(.2,0,0,1)", fill: "both" });
+    anim.onfinish = () => { el.remove(); if (++landed === n) updateScore(); };
+  }
+}
+
+// Timetable to scale
+const AGENDA = {
+  120: [["0:00", "Intro + live demo", "Jira sprint to summary to ticket", 10], ["0:10", "Pipeline demo", "An agent team with a supervisor", 3], ["0:13", "Team setup", "Name your team, open the starter kit", 5], ["0:18", "Play", "Claim tasks, show the judge, collect balloons", 87, true], ["1:45", "Scoring + show and tell", "Two teams show their best output", 15]],
+  60: [["0:00", "Intro + live demo", "Jira sprint to summary to ticket", 5], ["0:05", "Team setup", "Name your team, open the starter kit", 5], ["0:10", "Play", "Tracks A and D, plus B1 and C1", 40, true], ["0:50", "Scoring", "Count the balloons", 10]]
+};
+const ttEl = document.getElementById("timetable");
+function renderAgenda(len) {
+  ttEl.innerHTML = AGENDA[len].map(([at, name, detail, min, play]) =>
+    `<div class="tt-row${play ? " play" : ""}"><span class="tt-time">${at}</span>
+      <div class="tt-body"><span class="tt-fill" style="--pct:${(min / len) * 100}%"></span>
+      <span class="tt-text"><b>${name}</b><span>${detail}. ${min} min</span></span></div></div>`
+  ).join("");
+  document.querySelectorAll(".agenda-switch .tab").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.len === String(len))));
+}
+document.querySelectorAll(".agenda-switch .tab").forEach((b) => b.addEventListener("click", () => renderAgenda(Number(b.dataset.len))));
+
+// Lottie: balloons rise once, then loop the sway. Claims pop a burst.
+const LOTTIE = (() => { try { return JSON.parse(document.getElementById("lottie-data").textContent); } catch { return null; } })();
+const hasLottie = !!(window.lottie && LOTTIE);
+if (hasLottie) {
+  const release = document.getElementById("release");
+  const hero = lottie.loadAnimation({
+    container: document.getElementById("hero-lottie"), renderer: "svg", loop: false, autoplay: false,
+    animationData: LOTTIE.hero, rendererSettings: { preserveAspectRatio: "xMidYMid meet" }
+  });
+  hero.addEventListener("DOMLoaded", () => {
+    release.classList.remove("no-lottie");
+    if (reduceMotion) { hero.goToAndStop(150, true); return; }
+    hero.playSegments([0, 150], true);
+    hero.addEventListener("complete", function loopIt() {
+      hero.removeEventListener("complete", loopIt);
+      hero.loop = true;
+      hero.playSegments([150, 390], true);
+    });
+  });
+  new IntersectionObserver(([e]) => { if (!reduceMotion && hero.loop) e.isIntersecting ? hero.play() : hero.pause(); }).observe(release);
+}
+
+function burstAt(x, y, size) {
+  if (!hasLottie || reduceMotion) return;
+  const box = document.createElement("div");
+  box.className = "burst";
+  box.style.cssText = `left:${x}px; top:${y}px; width:${size}px; height:${size}px`;
+  document.body.appendChild(box);
+  const a = lottie.loadAnimation({ container: box, renderer: "svg", loop: false, autoplay: true,
+    animationData: JSON.parse(JSON.stringify(LOTTIE.burst)) });
+  a.addEventListener("complete", () => { a.destroy(); box.remove(); });
+}
+window.burstAt = burstAt;
+
+show("A");
+renderAgenda(120);
+</script>
+<div class="toro-layer" id="toro-layer" aria-hidden="true"></div>
+<div class="toro-say" id="toro-say" aria-live="polite"><p></p></div>
+<button class="toro-toggle" id="toro-toggle" type="button" aria-pressed="true">Toro caught <b>0</b><span>Hide</span></button>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+<!-- POP:START --><script>
+// Toro in 3D: a procedural take on the Zalopay cat mascot (no model files).
+// Big blue head, round glasses, green Z on top, white shirt, striped limbs,
+// white paws, a striped tail and a school backpack. Animated with a hand-written
+// run cycle, squash and stretch, jump physics and spring follow-through.
+// Toro lives on a fixed, click-through layer along the bottom of the window, so he
+// runs with the reader across the whole page. Inlined by mascot/inline_mascot.py.
+(() => {
+  const host = document.getElementById("toro-layer");
+  const hill = document.getElementById("track");
+  const sayBox = document.getElementById("toro-say");
+  const toggle = document.getElementById("toro-toggle");
+  const bail = () => { [host, sayBox, toggle].forEach((el) => el && (el.hidden = true)); };
+  if (!host || !window.THREE) return bail();
+  const frameIsDocHeight = innerHeight > Math.max(screen.height, 900) * 1.4;
+  if (frameIsDocHeight && hill) {
+    hill.appendChild(host);
+    host.classList.add("in-hill");
+    if (sayBox) hill.appendChild(sayBox), sayBox.classList.add("in-hill");
+    if (toggle) hill.appendChild(toggle), toggle.classList.add("in-hill");
+  }
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); }
+  catch { return bail(); }
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  const C = {
+    blue: 0x1fa3f5, blueDeep: 0x0b7fd6, white: 0xf7fbff, navy: 0x0b1b3f, green: 0x2ec46b, greenDeep: 0x1d9a52,
+    mouth: 0xb3263a, tongue: 0xff7f8e, blush: 0xff9fb0, scarf: 0xe53935, scarfDeep: 0xb71c1c, orange: 0xff9417, orangeDeep: 0xe56d00, sun: 0xffc83d, sky: 0x1e8fea,
+  };
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  host.prepend(renderer.domElement);
+  renderer.domElement.setAttribute("aria-hidden", "true");
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 100);
+  camera.position.set(0, 2.7, 9.6);
+  const LOOK = new THREE.Vector3(0, 2.35, 0);
+  camera.lookAt(LOOK);
+
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xb5d99a, 1.7));
+  const sun = new THREE.DirectionalLight(0xfff4e0, 2.3);
+  sun.position.set(4, 9, 6);
+  sun.castShadow = true;
+  sun.shadow.mapSize.set(1024, 1024);
+  Object.assign(sun.shadow.camera, { left: -16, right: 16, top: 8, bottom: -4, near: 1, far: 30 });
+  scene.add(sun);
+
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(80, 20), new THREE.ShadowMaterial({ opacity: 0.18 }));
+  ground.rotation.x = -Math.PI / 2;
+  ground.receiveShadow = true;
+  scene.add(ground);
+
+  const mat = (color, rough = 0.45) => new THREE.MeshStandardMaterial({ color, roughness: rough, metalness: 0 });
+  const basic = (color, op = 1) => new THREE.MeshBasicMaterial({ color, transparent: op < 1, opacity: op });
+  const mesh = (geo, m, cast = true) => { const o = new THREE.Mesh(geo, m); o.castShadow = cast; return o; };
+
+  function makeBalloon(color, r = 0.34) {
+    const g = new THREE.Group();
+    const body = mesh(new THREE.SphereGeometry(r, 32, 24), mat(color, 0.3));
+    body.scale.set(1, 1.18, 1);
+    const knot = mesh(new THREE.ConeGeometry(r * 0.2, r * 0.3, 12), mat(color, 0.3));
+    knot.position.y = -r * 1.22; knot.rotation.x = Math.PI;
+    const shine = mesh(new THREE.SphereGeometry(r * 0.22, 12, 8), basic(0xffffff, 0.55), false);
+    shine.position.set(-r * 0.38, r * 0.45, r * 0.72); shine.scale.set(1, 1.4, 0.4);
+    g.add(body, knot, shine);
+    g.userData.bottom = -r * 1.37;
+    return g;
+  }
+
+  // A limb: blue capsule with two white stripe rings, hung from a pivot.
+  function limb(len, r, stripeAt) {
+    const pivot = new THREE.Group();
+    const seg = mesh(new THREE.CapsuleGeometry(r, len, 6, 14), mat(C.blue, 0.5));
+    seg.position.y = -len / 2 - r * 0.2;
+    pivot.add(seg);
+    for (const f of stripeAt) {
+      const ring = mesh(new THREE.TorusGeometry(r * 1.0, r * 0.28, 8, 20), mat(C.white, 0.5), false);
+      ring.rotation.x = Math.PI / 2; ring.position.y = -len * f - r * 0.2;
+      pivot.add(ring);
+    }
+    return pivot;
+  }
+
+  // Toro
+  const toro = new THREE.Group();
+  const bodyPivot = new THREE.Group(); // bob, lean, squash and stretch
+  toro.add(bodyPivot);
+
+  // Round, chubby belly in a white school shirt.
+  const BELLY_Y = 0.86;
+  const torso = mesh(new THREE.SphereGeometry(0.6, 40, 28), mat(C.white, 0.6));
+  torso.position.y = BELLY_Y; torso.scale.set(1.12, 0.96, 1.0);
+  const button = (y) => { const b = mesh(new THREE.SphereGeometry(0.035, 10, 8), mat(0xc9d8ea, 0.5), false); b.position.set(0, y, 0.6 - Math.abs(y - BELLY_Y) * 0.25); return b; };
+  bodyPivot.add(torso, button(0.98), button(0.78));
+
+  // Red scarf ("khăn quàng đỏ"): a ring round the neck, a knot and two short tails.
+  const scarf = mesh(new THREE.TorusGeometry(0.4, 0.085, 10, 28), mat(C.scarf, 0.55));
+  scarf.rotation.x = Math.PI / 2; scarf.position.y = 1.36; scarf.scale.set(1.05, 1, 1);
+  const scarfKnot = mesh(new THREE.SphereGeometry(0.09, 14, 10), mat(C.scarfDeep, 0.55), false);
+  scarfKnot.position.set(0, 1.32, 0.43);
+  bodyPivot.add(scarf, scarfKnot);
+  for (const sx of [-1, 1]) {
+    const tailBit = mesh(new THREE.ConeGeometry(0.08, 0.26, 3), mat(C.scarf, 0.55), false);
+    tailBit.position.set(sx * 0.07, 1.18, 0.46); tailBit.rotation.set(0.2, 0, Math.PI + sx * 0.35);
+    bodyPivot.add(tailBit);
+  }
+
+  // Backpack (school theme): orange box, flap, and two straps across the chest.
+  const pack = mesh(new THREE.BoxGeometry(0.62, 0.6, 0.26), mat(C.orange, 0.55));
+  pack.position.set(0, 0.98, -0.62);
+  const flap = mesh(new THREE.BoxGeometry(0.64, 0.24, 0.28), mat(C.orangeDeep, 0.55));
+  flap.position.set(0, 1.2, -0.62);
+  const pocket = mesh(new THREE.BoxGeometry(0.4, 0.2, 0.06), mat(C.sun, 0.55));
+  pocket.position.set(0, 0.84, -0.78);
+  bodyPivot.add(pack, flap, pocket);
+  for (const sx of [-1, 1]) {
+    const strap = mesh(new THREE.BoxGeometry(0.08, 0.5, 0.04), mat(C.orangeDeep, 0.55), false);
+    strap.position.set(sx * 0.3, 1.02, 0.5); strap.rotation.set(-0.35, 0, -sx * 0.12);
+    bodyPivot.add(strap);
+  }
+
+  // Head
+  const head = new THREE.Group();
+  head.position.y = 1.96;
+  bodyPivot.add(head);
+  const HR = 0.86, HS = [1.1, 0.98, 1.02];
+  const skull = mesh(new THREE.SphereGeometry(HR, 48, 32), mat(C.blue, 0.4));
+  skull.scale.set(...HS);
+  const muzzle = mesh(new THREE.SphereGeometry(0.44, 32, 20), mat(C.white, 0.45), false);
+  muzzle.position.set(0, -0.3, 0.52); muzzle.scale.set(1.35, 0.72, 0.62);
+  head.add(skull, muzzle);
+  // Front surface of the head ellipsoid at (x, y), so face parts sit on it.
+  const faceZ = (x, y) => HR * HS[2] * Math.sqrt(Math.max(0, 1 - (x / (HR * HS[0])) ** 2 - (y / (HR * HS[1])) ** 2));
+
+  for (const sx of [-1, 1]) {
+    const ear = mesh(new THREE.ConeGeometry(0.3, 0.4, 24), mat(C.blue, 0.4));
+    ear.position.set(sx * 0.58, 0.74, -0.04); ear.rotation.z = -sx * 0.42;
+    const inner = mesh(new THREE.ConeGeometry(0.16, 0.28, 16), mat(C.white, 0.5), false);
+    inner.position.set(0, -0.04, 0.12); ear.add(inner);
+    head.add(ear);
+  }
+
+  const eyes = [], pupils = [];
+  const EY = 0.03, EX = 0.35;
+  for (const sx of [-1, 1]) {
+    const x = sx * EX, z = faceZ(x, EY);
+    const eye = mesh(new THREE.SphereGeometry(0.27, 24, 18), mat(C.white, 0.15), false);
+    eye.position.set(x, EY, z - 0.1); eye.scale.set(1, 1.08, 0.55);
+    const pupil = mesh(new THREE.SphereGeometry(0.19, 20, 16), mat(C.navy, 0.15), false);
+    pupil.position.set(x, EY - 0.02, z + 0.0); pupil.scale.set(1, 1.1, 0.45);
+    const glint1 = mesh(new THREE.SphereGeometry(0.05, 10, 8), basic(0xffffff), false);
+    glint1.position.set(0.05, 0.06, 0.07); pupil.add(glint1);
+    const glint2 = mesh(new THREE.SphereGeometry(0.025, 8, 6), basic(0xffffff), false);
+    glint2.position.set(-0.05, -0.05, 0.07); pupil.add(glint2);
+    const rim = mesh(new THREE.TorusGeometry(0.31, 0.036, 10, 36), mat(C.navy, 0.3), false);
+    const blush = mesh(new THREE.SphereGeometry(0.11, 16, 10), basic(C.blush, 0.8), false);
+    const bx = sx * 0.62, by = -0.3;
+    blush.position.set(bx, by, faceZ(bx, by) - 0.01); blush.scale.set(1.4, 0.8, 0.3);
+    head.add(blush);
+    rim.position.set(x, EY, z + 0.06);
+    head.add(eye, pupil, rim); eyes.push(eye); pupils.push(pupil);
+
+    // Whiskers: three thin strokes on each cheek.
+    for (let k = 0; k < 3; k++) {
+      const w = mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.36, 6), mat(C.navy, 0.4), false);
+      w.rotation.z = Math.PI / 2 + sx * (k - 1) * 0.22;
+      w.position.set(sx * 0.82, -0.22 - k * 0.08, faceZ(sx * 0.7, -0.2) - 0.02);
+      head.add(w);
+    }
+  }
+  const bridge = mesh(new THREE.CylinderGeometry(0.025, 0.025, 0.14, 8), mat(C.navy, 0.3), false);
+  bridge.rotation.z = Math.PI / 2; bridge.position.set(0, EY + 0.02, faceZ(0, EY) + 0.06);
+  const nose = mesh(new THREE.SphereGeometry(0.05, 12, 10), mat(C.navy, 0.3), false);
+  nose.position.set(0, -0.2, faceZ(0, -0.2) + 0.12);
+  const mouth = mesh(new THREE.SphereGeometry(0.08, 16, 12), mat(C.mouth, 0.5), false);
+  mouth.position.set(0, -0.37, faceZ(0, -0.37) + 0.08); mouth.scale.set(1.2, 0.9, 0.4);
+  const tongue = mesh(new THREE.SphereGeometry(0.045, 12, 10), mat(C.tongue, 0.5), false);
+  tongue.position.set(0, -0.4, faceZ(0, -0.4) + 0.11); tongue.scale.set(1.3, 0.6, 0.4);
+  head.add(bridge, nose, mouth, tongue);
+
+  // The green Z on top of the head.
+  const z = new THREE.Shape();
+  [[-0.26, 0.2], [0.26, 0.2], [0.26, 0.1], [-0.07, -0.12], [0.26, -0.12], [0.26, -0.22], [-0.26, -0.22], [-0.26, -0.12], [0.07, 0.1], [-0.26, 0.1]]
+    .forEach(([px, py], i) => (i ? z.lineTo(px, py) : z.moveTo(px, py)));
+  const zGeo = new THREE.ExtrudeGeometry(z, { depth: 0.12, bevelEnabled: true, bevelThickness: 0.04, bevelSize: 0.035, bevelSegments: 3 });
+  zGeo.center();
+  const zMesh = mesh(zGeo, mat(C.green, 0.4));
+  zMesh.position.set(0.02, 0.86, 0.05); zMesh.rotation.set(-0.15, 0, 0.12); zMesh.scale.setScalar(1.05);
+  head.add(zMesh);
+
+  // Arms and legs
+  const legs = [], arms = [];
+  for (const sx of [-1, 1]) {
+    const leg = limb(0.14, 0.15, [0.5]);
+    leg.position.set(sx * 0.3, 0.44, 0);
+    const foot = mesh(new THREE.SphereGeometry(0.19, 18, 12), mat(C.white, 0.5));
+    foot.scale.set(1.05, 0.6, 1.35); foot.position.set(0, -0.36, 0.08);
+    leg.add(foot);
+    toro.add(leg); legs.push(leg);
+
+    const arm = limb(0.2, 0.13, [0.55]);
+    arm.position.set(sx * 0.62, 1.14, 0);
+    arm.rotation.z = sx * 0.5;
+    const paw = mesh(new THREE.SphereGeometry(0.155, 16, 12), mat(C.white, 0.5));
+    paw.position.y = -0.4; arm.add(paw);
+    arm.userData.hand = paw;
+    bodyPivot.add(arm); arms.push(arm);
+  }
+
+  // Striped tail, curling up behind the backpack.
+  const tailCurve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(0, 0.5, -0.5), new THREE.Vector3(0.14, 0.42, -0.92),
+    new THREE.Vector3(0.4, 0.72, -1.1), new THREE.Vector3(0.48, 1.12, -1.02),
+  ]);
+  const tail = mesh(new THREE.TubeGeometry(tailCurve, 30, 0.09, 12), mat(C.blue, 0.5));
+  const tailTip = mesh(new THREE.SphereGeometry(0.11, 14, 10), mat(C.white, 0.5));
+  tailTip.position.copy(tailCurve.getPoint(1));
+  [0.35, 0.65].forEach((f) => {
+    const ring = mesh(new THREE.TorusGeometry(0.095, 0.035, 8, 16), mat(C.white, 0.5), false);
+    ring.position.copy(tailCurve.getPoint(f));
+    ring.lookAt(tailCurve.getPoint(f).add(tailCurve.getTangent(f)));
+    bodyPivot.add(ring);
+  });
+  const tailPivot = new THREE.Group();
+  bodyPivot.add(tail, tailTip, tailPivot);
+  scene.add(toro);
+
+  // Held balloon on a string, trailing the right paw on a soft spring.
+  const held = makeBalloon(C.orange, 0.38);
+  scene.add(held);
+  const stringGeo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
+  scene.add(new THREE.Line(stringGeo, new THREE.LineBasicMaterial({ color: 0x55709a })));
+  const heldPos = new THREE.Vector3(1.4, 4.2, -0.4), heldVel = new THREE.Vector3();
+
+  // Catchable balloons and pop confetti
+  const free = [], bits = [];
+  const colors = [C.orange, C.sky, C.sun, C.green];
+  function spawn(x) {
+    const b = makeBalloon(colors[(Math.random() * colors.length) | 0], 0.3);
+    b.position.set(x, 4.0 + Math.random() * 0.3, 0);
+    Object.assign(b.userData, { phase: Math.random() * 6.28, baseY: b.position.y, grow: 0 });
+    b.scale.setScalar(0.01);
+    scene.add(b); free.push(b);
+  }
+
+  let halfW = 8, running = false, shown = true, layerRect = host.getBoundingClientRect();
+  function resize() {
+    const w = host.clientWidth, h = host.clientHeight;
+    if (w < 2 || h < 2) return;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    const dist = camera.position.distanceTo(LOOK);
+    halfW = Math.max(1.5, Math.min(14, Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * dist * camera.aspect - 1.2));
+    layerRect = host.getBoundingClientRect();
+    if (!running) renderer.render(scene, camera);
+  }
+
+  // Pointer: Toro chases the cursor anywhere on the page. Screen x maps to the
+  // world x on Toro's plane, straight across the layer.
+  const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+  const planeZ = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+  const hit = new THREE.Vector3();
+  let pointerX = null, pointerUntil = 0;
+  function worldX(clientX) {
+    ndc.set((clientX / innerWidth) * 2 - 1, 0);
+    ray.setFromCamera(ndc, camera);
+    return ray.ray.intersectPlane(planeZ, hit) ? THREE.MathUtils.clamp(hit.x, -halfW, halfW) : 0;
+  }
+  addEventListener("pointermove", (e) => { pointerX = worldX(e.clientX); pointerUntil = performance.now() + 1800; }, { passive: true });
+  document.addEventListener("pointerleave", () => { pointerX = null; });
+  // Release a balloon above a screen x (the hero hill, or a claimed task card).
+  window.toroSpawn = (clientX) => { if (!reduce && shown && free.length < 4) spawn(worldX(clientX)); };
+  if (hill) hill.addEventListener("click", (e) => window.toroSpawn(e.clientX));
+
+  let caught = 0;
+  const v3 = new THREE.Vector3();
+  function popBalloon(b) {
+    free.splice(free.indexOf(b), 1);
+    b.getWorldPosition(v3);
+    for (let i = 0; i < 16; i++) {
+      const bit = mesh(new THREE.BoxGeometry(0.07, 0.12, 0.02), basic(colors[i % colors.length], 1), false);
+      bit.material.transparent = true;
+      bit.position.copy(v3);
+      const a = Math.random() * Math.PI * 2, sp = 2 + Math.random() * 2.5;
+      Object.assign(bit.userData, {
+        v: new THREE.Vector3(Math.cos(a) * sp, Math.sin(a) * sp + 2, (Math.random() - 0.5) * 2),
+        spin: new THREE.Vector3(Math.random() * 12, Math.random() * 12, 0), life: 1,
+      });
+      scene.add(bit); bits.push(bit);
+    }
+    scene.remove(b);
+    caught++; setToggleLabel();
+    if (caught === 1) say("Got it! Claim a task and I'll catch that one too.");
+    const p = v3.clone().project(camera), r = layerRect;
+    if (typeof window.burstAt === "function") window.burstAt(r.left + (p.x + 1) / 2 * r.width, r.top + (1 - p.y) / 2 * r.height, 180);
+  }
+
+  let x = 0, vx = 0, dir = 1, phase = 0, jumpY = 0, jumpV = 0, blinkAt = 2, wanderX = 0, wanderAt = 0, squash = 1, squashV = 0;
+  let idleFor = 0, nextWave = 1.5, waveUntil = 0, waveAmt = 0, waved = false, sayUntil = 0;
+  const clock = new THREE.Clock();
+
+  function step(dt, t) {
+    if (![x, vx, jumpY, jumpV, squash, squashV].every(Number.isFinite)) {
+      x = 0; vx = 0; jumpY = 0; jumpV = 0; squash = 1; squashV = 0; heldPos.set(1.4, 4.2, -0.4); heldVel.set(0, 0, 0);
+    }
+    // Target: nearest balloon, else the cursor, else a new wander point every few seconds.
+    let target;
+    if (free.length) target = free.reduce((a, b) => (Math.abs(b.position.x - x) < Math.abs(a.position.x - x) ? b : a)).position.x;
+    else if (pointerX !== null && performance.now() < pointerUntil) target = pointerX;
+    else {
+      if (t > wanderAt) { wanderX = (Math.random() * 2 - 1) * halfW * 0.85; wanderAt = t + 3 + Math.random() * 3; }
+      target = wanderX;
+    }
+
+    const dx = target - x;
+    const want = Math.abs(dx) < 0.15 ? 0 : Math.sign(dx) * Math.min(5, Math.abs(dx) * 3);
+    vx += (want - vx) * Math.min(1, dt * 5);
+    x = THREE.MathUtils.clamp(x + vx * dt, -halfW, halfW);
+    const speed = Math.min(1, Math.abs(vx) / 5);
+    if (Math.abs(vx) > 0.2) dir = Math.sign(vx);
+
+    // Jump for a balloon overhead; Toro bonks it with his head at the top of the jump.
+    const onGround = jumpY <= 0.0001;
+    const under = free.find((b) => Math.abs(b.position.x - x) < 0.4 && b.userData.grow >= 1);
+    if (under && onGround && jumpV === 0) { jumpV = 6.2; squashV = 40; }
+    if (!onGround || jumpV > 0) {
+      jumpV -= 22 * dt;
+      jumpY = Math.max(0, jumpY + jumpV * dt);
+      if (jumpY === 0) { squashV = jumpV * 6; jumpV = 0; }
+    }
+    if (under && jumpY > 0.5 && jumpV < 1.5) popBalloon(under);
+
+    // Squash and stretch spring: stretch on take-off, squash on landing.
+    squashV += (-(squash - 1) * 260 - squashV * 16) * dt;
+    squash = THREE.MathUtils.clamp(squash + squashV * dt * 0.02, 0.78, 1.22);
+
+    // Run cycle: legs and arms swing in opposition, scaled by speed.
+    phase += dt * (4 + speed * 10);
+    const swing = Math.sin(phase) * 0.95 * speed;
+    const inAir = jumpY > 0.02;
+    legs[0].rotation.x = inAir ? -0.6 : swing;
+    legs[1].rotation.x = inAir ? 0.35 : -swing;
+    arms[0].rotation.x = inAir ? -2.7 : -swing * 0.9;
+    arms[1].rotation.x = inAir ? -2.7 : swing * 0.9;
+    const idle = 1 - speed;
+    arms[0].rotation.z = -0.5 - idle * Math.sin(t * 1.6) * 0.1;
+    arms[1].rotation.z = 0.5 + idle * Math.sin(t * 1.6 + 1) * 0.1;
+
+    // Wave: after standing still for a moment, Toro faces the reader and waves his
+    // free (left) paw for about 1.8s, then again every 5-8s while he stays idle.
+    if (speed < 0.08 && !inAir) idleFor += dt; else { idleFor = 0; waveUntil = Math.min(waveUntil, t); }
+    if (idleFor > 0.9 && t > nextWave && t > waveUntil) {
+      waveUntil = t + 1.8; nextWave = t + 5 + Math.random() * 3;
+      if (!waved) { waved = true; if (performance.now() > sayUntil) say("Xin chào! Welcome to school.", 2200); }
+    }
+    waveAmt += ((t < waveUntil ? 1 : 0) - waveAmt) * Math.min(1, dt * 8);
+    if (waveAmt > 0.001) {
+      const wag = Math.sin(t * 10) * 0.38;
+      arms[0].rotation.z += (-2.55 + wag - arms[0].rotation.z) * waveAmt;
+      arms[0].rotation.x *= 1 - waveAmt;
+      arms[0].userData.hand.rotation.z = wag * 0.6 * waveAmt;
+    }
+
+    toro.position.set(x, jumpY, 0);
+    const turn = speed > 0.15 ? dir * 0.85 : 0;
+    toro.rotation.y += (turn - toro.rotation.y) * Math.min(1, dt * 7);
+    bodyPivot.position.y = Math.abs(Math.sin(phase)) * 0.18 * speed + Math.sin(t * 2) * 0.025 * idle;
+    bodyPivot.rotation.z = -vx * 0.03;
+    bodyPivot.rotation.x = speed * 0.16;
+    const breathe = 1 + Math.sin(t * 2.2) * 0.018 * idle;
+    const sq = squash * breathe;
+    bodyPivot.scale.set(1 / Math.sqrt(sq), sq, 1 / Math.sqrt(sq));
+
+    // Head: overlaps the body motion slightly (follow-through), tilts when idle, looks up in a jump.
+    head.rotation.z = Math.sin(phase + 0.6) * 0.06 * speed + Math.sin(t * 1.1) * 0.05 * idle * (1 - waveAmt) + 0.1 * waveAmt;
+    head.rotation.x = inAir ? -0.25 : -speed * 0.1;
+
+    // Eyes follow the target and blink every few seconds.
+    const look = THREE.MathUtils.clamp(dx * 0.02, -0.06, 0.06);
+    pupils.forEach((p, i) => { p.position.x = (i ? EX : -EX) + look; });
+    const blink = t > blinkAt ? Math.max(0.1, Math.abs(Math.cos((t - blinkAt) * 14))) : 1;
+    if (t > blinkAt + 0.22) blinkAt = t + 2 + Math.random() * 3;
+    eyes.forEach((e) => { e.scale.y = 1.08 * blink; });
+    pupils.forEach((e) => { e.scale.y = 1.1 * blink; });
+
+    // Held balloon: spring toward a point above the paw, so it lags and swings.
+    arms[1].userData.hand.getWorldPosition(v3);
+    const goal = v3.clone().add(new THREE.Vector3(-dir * 0.6, 1.7, -0.4));
+    heldVel.addScaledVector(goal.clone().sub(heldPos), 38 * dt).multiplyScalar(Math.exp(-5 * dt));
+    heldPos.addScaledVector(heldVel, dt);
+    held.position.copy(heldPos);
+    held.rotation.z = THREE.MathUtils.clamp(-heldVel.x * 0.12, -0.5, 0.5);
+    const tie = heldPos.clone().add(new THREE.Vector3(0, held.userData.bottom, 0).applyEuler(held.rotation));
+    stringGeo.setFromPoints([v3.clone(), tie]);
+
+    // Free balloons grow in with a small overshoot and bob; confetti falls and fades.
+    free.forEach((b) => {
+      const g = (b.userData.grow = Math.min(1, b.userData.grow + dt * 3));
+      b.scale.setScalar(Math.max(0.01, 1 + 2.7 * (g - 1) ** 3 + 1.7 * (g - 1) ** 2));
+      b.position.y = b.userData.baseY + Math.sin(t * 2 + b.userData.phase) * 0.08;
+      b.rotation.z = Math.sin(t * 1.3 + b.userData.phase) * 0.08;
+    });
+    for (let i = bits.length - 1; i >= 0; i--) {
+      const b = bits[i], u = b.userData;
+      u.v.y -= 9 * dt; b.position.addScaledVector(u.v, dt);
+      b.rotation.x += u.spin.x * dt; b.rotation.y += u.spin.y * dt;
+      u.life -= dt * 0.9; b.material.opacity = Math.max(0, u.life);
+      if (u.life <= 0 || b.position.y < 0) { scene.remove(b); b.geometry.dispose(); b.material.dispose(); bits.splice(i, 1); }
+    }
+  }
+
+  // Speech bubble: a DOM element pinned above Toro's head, with section-aware lines.
+  const headTop = new THREE.Vector3();
+  function say(text, ms = 4200) {
+    if (!sayBox || !shown) return;
+    sayBox.firstElementChild.textContent = text;
+    sayBox.classList.add("on");
+    sayUntil = performance.now() + ms;
+  }
+  function placeSay() {
+    if (!sayBox) return;
+    head.getWorldPosition(headTop); headTop.y += 1.15;
+    const p = headTop.project(camera), r = host.classList.contains("in-hill") ? host.getBoundingClientRect() : layerRect;
+    const sx = THREE.MathUtils.clamp(r.left + (p.x + 1) / 2 * r.width, 150, innerWidth - 150);
+    const sy = r.top + (1 - p.y) / 2 * r.height;
+    sayBox.style.transform = sayBox.classList.contains("in-hill")
+      ? `translate(${sx - r.left}px, ${sy - r.top}px)` : `translate(${sx}px, ${sy}px)`;
+    if (performance.now() > sayUntil) sayBox.classList.remove("on");
+  }
+
+  function frame() {
+    if (!running) return;
+    const dt = Math.min(clock.getDelta(), 1 / 30);
+    step(dt, clock.elapsedTime);
+    renderer.render(scene, camera);
+    placeSay();
+    requestAnimationFrame(frame);
+  }
+  function setRunning(on) {
+    if (on === running) return;
+    running = on;
+    if (on) { clock.getDelta(); requestAnimationFrame(frame); }
+  }
+
+  new ResizeObserver(resize).observe(host);
+  addEventListener("resize", resize);
+  resize();
+
+  // Show / hide toggle (Toro covers the bottom of the window, so readers can park him).
+  function setToggleLabel() {
+    if (!toggle) return;
+    toggle.innerHTML = shown ? `Toro caught <b>${caught}</b><span>Hide</span>` : "Show Toro";
+    toggle.setAttribute("aria-pressed", String(shown));
+  }
+  function setShown(on) {
+    shown = on;
+    host.hidden = !on;
+    if (sayBox) { sayBox.hidden = !on; sayBox.classList.remove("on"); }
+    try { localStorage.setItem("toro-hidden", on ? "0" : "1"); } catch {}
+    setToggleLabel();
+    if (!reduce) setRunning(on && !document.hidden);
+  }
+  if (toggle) toggle.addEventListener("click", () => setShown(!shown));
+  let startHidden = false;
+  try { startHidden = localStorage.getItem("toro-hidden") === "1"; } catch {}
+
+  if (reduce) {
+    // One still pose: Toro at the left, facing the viewer, holding a balloon.
+    x = -halfW * 0.7; wanderX = x; wanderAt = Infinity; waved = true; waveUntil = Infinity;
+    for (let i = 0; i < 120; i++) step(1 / 60, i / 60);
+    renderer.render(scene, camera);
+    setShown(!startHidden);
+    return;
+  }
+
+  // Section-aware lines: Toro comments on the part of the page you are reading.
+  const LINES = [
+    ["top", "Hi, I'm Toro! Click the hill to let a balloon go."],
+    ["why-h", "Three subjects. All useful on Monday."],
+    ["tracks", "Claim a task and I'll catch your balloon!"],
+    ["rules", "Rule 5: no real user data, okay?"],
+    ["agenda", "87 minutes of play. Let's go!"],
+    ["prep", "Don't forget your laptop!"],
+  ];
+  let lastLine = "";
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => {
+      if (!e.isIntersecting) return;
+      const line = LINES.find(([id]) => e.target.id === id || e.target.getAttribute("aria-labelledby") === id);
+      if (line && line[0] !== lastLine) { lastLine = line[0]; say(line[1]); }
+    });
+  }, { threshold: 0.35 });
+  LINES.forEach(([id]) => {
+    const el = document.getElementById(id);
+    const target = el && (el.tagName === "H2" ? el.closest("section") : el);
+    if (target) io.observe(target);
+  });
+
+  x = -halfW * 0.6;
+  spawn(-halfW * 0.1);
+  document.addEventListener("visibilitychange", () => setRunning(shown && !document.hidden));
+  setShown(!startHidden);
+})();
+</script><!-- POP:END -->
